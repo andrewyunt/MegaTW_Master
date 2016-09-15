@@ -1,0 +1,32 @@
+name: MegaTW
+main: com.andrewyunt.megatw.MegaTW
+version: 1.0
+softdepend: [StaffPlus,ProtocolLib]
+
+############################################################
+# +------------------------------------------------------+ #
+# |                       Commands                       | #
+# +------------------------------------------------------+ #
+############################################################
+commands:
+  bloodtoggle:
+    description: Toggle blood particles on or off..
+    permission: megatw.bloodtoggle
+
+############################################################
+# +------------------------------------------------------+ #
+# |                      Permissions                     | #
+# +------------------------------------------------------+ #
+############################################################
+permissions:
+   megatw.*:
+     description: Gives access to all MegaTW commands.
+     children:
+       megatw.arena: true
+       megatw.createarena: true
+       megatw.deletearena: true
+       megatw.addspawn: true
+       megatw.removespawn: true
+   megatw.bloodtoggle:
+     description: Allows you to toggle blood particles on or off.
+     default: true
