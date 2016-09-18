@@ -17,14 +17,24 @@ package com.andrewyunt.megatw.listeners;
 
 import com.andrewyunt.megatw.MegaTW;
 import com.andrewyunt.megatw.exception.PlayerException;
+import com.andrewyunt.megatw.exception.ServerException;
 import com.andrewyunt.megatw.exception.SignException;
+import com.andrewyunt.megatw.managers.SignManager;
 import com.andrewyunt.megatw.objects.GamePlayer;
+import com.andrewyunt.megatw.objects.GameServer;
+import com.andrewyunt.megatw.objects.SignDisplay;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+
 import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -163,37 +173,99 @@ public class PlayerListener implements Listener {
 		if (event.getLine(0) == null || event.getLine(1) == null)
 			return;
 		
-		if (!event.getLine(0).equalsIgnoreCase("[Leaderboard]"))
-			return;
-		
 		Player player = event.getPlayer();
+		SignDisplay.Type type = null;
+		int place = 0;
+		GameServer server = null;
+		
+		if (event.getLine(0).equalsIgnoreCase("[Leaderboard]")) {
+			type = SignDisplay.Type.LEADERBOARD;
+			
+			try {
+				place = Integer.valueOf(event.getLine(1));
+			} catch (NumberFormatException e) {
+				player.sendMessage(ChatColor.RED + "You did not enter an integer for the sign place.");
+				return;
+			}
+			
+			if (place > 5) {
+				player.sendMessage(ChatColor.RED + "You may not enter a place over 5.");
+				return;
+			}
+		} else if (event.getLine(0).equalsIgnoreCase("[Join]")) {
+			type = SignDisplay.Type.SERVER;
+			
+			try {
+				server = MegaTW.getInstance().getServerManager().getServer(event.getLine(1));
+			} catch (ServerException e) {
+				player.sendMessage(String.format("The server %s is not registered in the config.",
+						event.getLine(1)));
+			}
+		} else
+			return;
 		
 		if (!player.hasPermission("megatw.sign.create")) {
-			player.sendMessage(ChatColor.RED + "You do not have permission to create a leaderboard sign.");
+			player.sendMessage(ChatColor.RED + "You do not have permission to create a sign display.");
 			return;
 		}
 		
-		int place = 0;
+		SignDisplay sign = null;
 		
 		try {
-			place = Integer.valueOf(event.getLine(1));
-		} catch (NumberFormatException e) {
-			player.sendMessage(ChatColor.RED + "You did not enter an integer for the sign place.");
-			return;
-		}
-		
-		if (place > 5) {
-			player.sendMessage(ChatColor.RED + "You may not enter a place over 5.");
-			return;
-		}
-		
-		try {
-			MegaTW.getInstance().getSignManager().createSign(
+			sign = MegaTW.getInstance().getSignManager().createSign(
+					type,
 					event.getBlock().getLocation(),
-					place,
 					6000L);
 		} catch (SignException e) {
 			player.sendMessage(ChatColor.RED + e.getMessage());
+			return;
+		}
+		
+		if (place != 0)
+			sign.setPlace(place);
+		else if (server != null)
+			sign.setServer(server);
+		else
+			return;
+		
+		sign.refresh();
+	}
+	
+	@EventHandler
+	public void onSignClick(PlayerInteractEvent event) {
+		
+		if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
+			return;
+		
+		Block block = event.getClickedBlock();
+		
+		if (block.getType() != Material.SIGN_POST && block.getType() != Material.WALL_SIGN)
+			return;
+		
+		Sign sign =(Sign) block.getState();
+		
+		if (!sign.getLine(0).equals("[Join]"))
+			return;
+		
+		ByteArrayDataOutput out = ByteStreams.newDataOutput();
+		out.writeUTF("Connect");
+		out.writeUTF(ChatColor.stripColor(sign.getLine(1)));
+		event.getPlayer().sendPluginMessage(MegaTW.getInstance(), "BungeeCord", out.toByteArray());
+	}
+	
+	@EventHandler
+	public void onSignBreak(BlockBreakEvent event) {
+		
+		Block block = event.getBlock();
+		
+		if (block.getType() != Material.SIGN_POST && block.getType() != Material.WALL_SIGN)
+			return;
+		
+		SignManager signManager = MegaTW.getInstance().getSignManager();
+		
+		try {
+			signManager.deleteSign(signManager.getSign(block.getLocation()));
+		} catch (SignException e) {
 		}
 	}
 }

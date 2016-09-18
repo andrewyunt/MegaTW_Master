@@ -13,60 +13,24 @@
  * APPLICABLE LAWS AND INTERNATIONAL TREATIES. THE RECEIPT OR POSSESSION OF THIS SOURCE CODE AND/OR RELATED INFORMATION DOES NOT CONVEY OR IMPLY ANY RIGHTS
  * TO REPRODUCE, DISCLOSE OR DISTRIBUTE ITS CONTENTS, OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT MAY DESCRIBE, IN WHOLE OR IN PART.
  */
-package com.andrewyunt.megatw.event;
-
-import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-import org.bukkit.potion.PotionEffectType;
+package com.andrewyunt.megatw.exception;
 
 /**
- * The event which is fired when effects are applied to a player.
+ * The exception which is used when an error occurs with the GameServer object.
  * 
  * @author Andrew Yunt
  */
-public class EffectApplyEvent extends Event {
+public class ServerException extends Exception {
 	
-	private final Player player;
-	private final PotionEffectType effectType;
-	private boolean isCancelled;
-	private static final HandlerList handlers = new HandlerList();
+	private static final long serialVersionUID = 5746846866473140158L;
 
-	public EffectApplyEvent(Player player, PotionEffectType effectType, boolean isCancelled) {
+	public ServerException() {
 		
-		this.player = player;
-		this.effectType = effectType;
-		this.isCancelled = isCancelled;
+		super("An exception occured while conducting an operation on a server.");
 	}
 	
-	public Player getPlayer() {
+	public ServerException(String message) {
 		
-		return player;
-	}
-	
-	public PotionEffectType getEffectType() {
-		
-		return effectType;
-	}
-
-	public boolean isCancelled() {
-		
-		return isCancelled;
-	}
-	
-	public void setCancelled(boolean isCancelled) {
-		
-		this.isCancelled = isCancelled;
-	}
-
-	@Override
-	public HandlerList getHandlers() {
-		
-		return handlers;
-	}
-	
-    public static HandlerList getHandlerList() {
-
-		return handlers;
+		super(message);
 	}
 }

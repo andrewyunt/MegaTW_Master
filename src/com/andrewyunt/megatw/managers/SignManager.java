@@ -18,6 +18,7 @@ package com.andrewyunt.megatw.managers;
 import com.andrewyunt.megatw.MegaTW;
 import com.andrewyunt.megatw.configuration.SignConfiguration;
 import com.andrewyunt.megatw.exception.SignException;
+import com.andrewyunt.megatw.objects.GameServer;
 import com.andrewyunt.megatw.objects.SignDisplay;
 import com.andrewyunt.megatw.utilities.Utils;
 
@@ -32,15 +33,18 @@ public class SignManager {
 	
 	public final Set<SignDisplay> signs = new HashSet<SignDisplay>();
 
-	public SignDisplay createSign(Location loc, int place, long updateInterval) throws SignException {
+	public SignDisplay createSign(SignDisplay.Type type, Location loc, long updateInterval)
+			throws SignException {
 		
-		if (place == 0 || loc == null || updateInterval < 1)
+		if (loc == null || updateInterval < 1)
 			throw new SignException();
 		
 		SignDisplay sign = new SignDisplay(
+				type,
 				Utils.getHighestEntry(MegaTW.getInstance().getSignConfig().getConfig()
 						.getConfigurationSection("signs")) + 1,
-				loc, place, updateInterval, false);
+				loc, updateInterval, false);
+		
 		signs.add(sign);
 		
 		return sign;
@@ -99,6 +103,17 @@ public class SignManager {
 		}
 		
 		return true;
+	}
+	
+	public Set<SignDisplay> getServerSigns(GameServer server) {
+		
+		Set<SignDisplay> signs = new HashSet<SignDisplay>();
+		
+		for (SignDisplay sign : this.signs)
+			if (sign.getServer() == server)
+				signs.add(sign);
+		
+		return signs;
 	}
 	
 	/**

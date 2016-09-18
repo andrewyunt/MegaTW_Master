@@ -28,7 +28,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import com.andrewyunt.megatw.MegaTW;
+import com.andrewyunt.megatw.exception.ServerException;
 import com.andrewyunt.megatw.utilities.Utils;
+
+import net.md_5.bungee.api.ChatColor;
 
 /**
  * The object used to perform operations on signs in the MegaTW plugin.
@@ -37,9 +40,17 @@ import com.andrewyunt.megatw.utilities.Utils;
  */
 public class SignDisplay {
 	
-	private final int configNumber;
+	public enum Type {
+		LEADERBOARD,
+		SERVER
+	}
+	
 	private Sign bukkitSign;
-	private final int place;
+	private int place = 0;
+	private GameServer server = null;
+	
+	private final Type type;
+	private int configNumber;
 	
 	/**
 	 * Creates a sign display with the specified location and update interval.
@@ -51,18 +62,15 @@ public class SignDisplay {
 	 * @param place
 	 * 		The place on the leaderboard the sign should display.
 	 */
-	public SignDisplay (int configNumber, Location loc, int place, long updateInterval, boolean load) {
+	public SignDisplay (Type type, int configNumber, Location loc, long updateInterval, boolean load) {
 		
+		this.type = type;
 		this.configNumber = configNumber;
-		this.place = place;
 		
 		Block block = loc.getWorld().getBlockAt(loc);
 		
 		if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN)
 			bukkitSign =(Sign) block.getState();
-		
-		if (!load)
-			save();
 		
 		BukkitScheduler scheduler = MegaTW.getInstance().getServer().getScheduler();
 		scheduler.scheduleSyncRepeatingTask(MegaTW.getInstance(), new Runnable() {
@@ -79,9 +87,38 @@ public class SignDisplay {
 		}, 0L, updateInterval);
 	}
 	
+	public Type getType() {
+		
+		return type;
+	}
+	
+	public void setConfigNumber(int configNumber) {
+		
+		this.configNumber = configNumber;
+	}
+	
 	public int getConfigNumber() {
 		
 		return configNumber;
+	}
+	
+	public void setPlace(int place) {
+		
+		this.place = place;
+		
+		save();
+	}
+	
+	public void setServer(GameServer server) {
+		
+		this.server = server;
+		
+		save();
+	}
+	
+	public GameServer getServer() {
+		
+		return server;
 	}
 	
 	public Sign getBukkitSign() {
@@ -91,14 +128,26 @@ public class SignDisplay {
 	
 	public void refresh() {
 		
-		Map<Integer, Entry<OfflinePlayer, Integer>> mostKills = MegaTW.getInstance().getDataSource().getMostKills();
-		Entry<OfflinePlayer, Integer> entry = mostKills.get(place);
-		
-		OfflinePlayer op = entry.getKey();
-		
-		bukkitSign.setLine(0, op.getName());
-		bukkitSign.setLine(1, entry.getValue() + " Kills");
-		bukkitSign.setLine(3, place + Utils.getNumberSuffix(place) + " Place");
+		if (type == Type.LEADERBOARD) {
+			if (place == 0)
+				return;
+			
+			Map<Integer, Entry<OfflinePlayer, Integer>> mostKills = MegaTW.getInstance().getDataSource().getMostKills();
+			Entry<OfflinePlayer, Integer> entry = mostKills.get(place);
+			
+			OfflinePlayer op = entry.getKey();
+			
+			bukkitSign.setLine(0, op.getName());
+			bukkitSign.setLine(1, entry.getValue() + " Kills");
+			bukkitSign.setLine(3, place + Utils.getNumberSuffix(place) + " Place");
+		} else {
+			if (server == null)
+				return;
+			
+			bukkitSign.setLine(0, "[Join]");
+			bukkitSign.setLine(1, ChatColor.BOLD + server.getName());
+			bukkitSign.setLine(3, server.getPlayerCount() + " Online");
+		}
 
 		bukkitSign.update();
 	}
@@ -108,24 +157,34 @@ public class SignDisplay {
 		MegaTW plugin = MegaTW.getInstance();
 		FileConfiguration signConfig = plugin.getSignConfig().getConfig();
 		
-		signConfig.set("signs." + configNumber + ".place", place);
+		signConfig.set("signs." + configNumber + ".type", type.toString());
+		
+		if (type == Type.LEADERBOARD)
+			signConfig.set("signs." + configNumber + ".place", place);
+		
+		if (type == Type.SERVER)
+			signConfig.set("signs." + configNumber + ".server", server.getName());
 		
 		signConfig.createSection("signs." + configNumber + ".location",
 				Utils.serializeLocation(bukkitSign.getLocation()));
 		
 		MegaTW.getInstance().getSignConfig().saveConfig();
-		
-		MegaTW.getInstance().getSignManager().loadSign(
-				signConfig.getConfigurationSection("signs." + String.valueOf(configNumber)));
 	}
 	
 	public static SignDisplay loadFromConfig(ConfigurationSection section) {
 		
-		SignDisplay signDisplay = null;
-		int place = section.getInt("place");
+		SignDisplay.Type type = SignDisplay.Type.valueOf(section.getString("type"));
 		Location loc = Utils.deserializeLocation(section.getConfigurationSection("location"));
+		SignDisplay signDisplay = new SignDisplay(type, Integer.valueOf(section.getName()), loc, 6000L, true);
 		
-		signDisplay = new SignDisplay(Integer.valueOf(section.getName()), loc, place, 6000L, true);
+		if (type == Type.LEADERBOARD)
+			signDisplay.setPlace(section.getInt("place"));
+		
+		if (type == Type.SERVER)
+			try {
+				signDisplay.setServer(MegaTW.getInstance().getServerManager().getServer(section.getString("server")));
+			} catch (ServerException e) {
+			}
 		
 		return signDisplay;
 	}

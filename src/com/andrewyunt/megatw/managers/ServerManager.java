@@ -18,13 +18,23 @@ package com.andrewyunt.megatw.managers;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import com.andrewyunt.megatw.MegaTW;
+import com.andrewyunt.megatw.exception.ServerException;
 import com.andrewyunt.megatw.objects.GameServer;
+import com.andrewyunt.megatw.objects.SignDisplay;
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 
-public class ServerManager implements Listener {
+public class ServerManager implements Listener, PluginMessageListener{
 	
 	private final Map<String, GameServer> servers = new HashMap<String, GameServer>();
 	
@@ -35,7 +45,19 @@ public class ServerManager implements Listener {
 			@Override
 			public void run() {
 				
-				
+				for (Map.Entry<String, GameServer> entry : servers.entrySet()) {
+					Player[] onlinePlayers = MegaTW.getInstance().getServer().getOnlinePlayers();
+					
+					if (onlinePlayers.length == 0)
+						return;
+					
+					ByteArrayDataOutput out = ByteStreams.newDataOutput();
+					
+					out.writeUTF("PlayerCount");
+					out.writeUTF(entry.getKey());
+					
+					onlinePlayers[0].sendPluginMessage((Plugin) MegaTW.getInstance(), "BungeeCord", out.toByteArray());
+				}
 			}
 		}, 0L, 20L);
 	}
@@ -43,5 +65,61 @@ public class ServerManager implements Listener {
 	public Collection<GameServer> getServers() {
 		
 		return servers.values();
+	}
+	
+	public GameServer getServer(String name) throws ServerException {
+		
+		if (!servers.containsKey(name))
+			throw new ServerException("The specified server does not exist.");
+		
+		return servers.get(name);
+	}
+	
+	public boolean serverExists(String name) {
+		
+		return servers.containsKey(name);
+	}
+	
+	public GameServer getServerMostPlayers() {
+		
+		int mostPlayersCount = 0;
+		GameServer mostPlayersServer = null;
+		
+		for (Map.Entry<String, GameServer> entry : servers.entrySet()) {
+			GameServer server = entry.getValue();
+			int playerCount = server.getPlayerCount();
+			
+			if (playerCount > mostPlayersCount) {
+				mostPlayersServer = server;
+				mostPlayersCount = playerCount;
+			}
+		}
+		
+		return mostPlayersServer;
+	}
+	
+	@Override
+	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
+		
+		if (!channel.equals("BungeeCord"))
+			return;
+		
+		ByteArrayDataInput in = ByteStreams.newDataInput(message);
+		
+		if (!in.readUTF().equals("PlayerCount"))
+			return;
+		
+		GameServer server = servers.get(in.readUTF());
+		
+		server.setPlayerCount(in.readInt());
+		
+		for (SignDisplay sign : MegaTW.getInstance().getSignManager().getServerSigns(server))
+			sign.refresh();
+	}
+	
+	public void loadServers() {
+		
+		for (String name : MegaTW.getInstance().getConfig().getStringList("servers"))
+			servers.put(name, new GameServer(name));
 	}
 }

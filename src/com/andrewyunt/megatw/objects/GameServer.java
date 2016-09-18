@@ -29,4 +29,14 @@ public class GameServer{
 		
 		return name;
 	}
+
+	public void setPlayerCount(int playerCount) {
+		
+		this.playerCount = playerCount;
+	}
+	
+	public int getPlayerCount() {
+		
+		return playerCount;
+	}
 }

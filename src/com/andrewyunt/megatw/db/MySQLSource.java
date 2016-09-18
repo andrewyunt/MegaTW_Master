@@ -120,7 +120,7 @@ public class MySQLSource extends DataSource {
 		try {
 			statement.executeUpdate(String.format(
 					"INSERT INTO `Players` (`uuid`, `class`, `blood_particles`, `coins`, `earned_coins`, `kills`)"
-			+ " VALUES ('%s', '%s', %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE class = '%2$s',"
+			+ " VALUES ('%s', '%s', %s, %s, %s, %s) ON DUPLICATE KEY UPDATE class = '%2$s',"
 			+ " blood_particles = %3$s, coins = %4$s, earned_coins = %5$s, kills = %6$s;",
 			uuid,
 			classType == null ? "none" : classType.toString(),

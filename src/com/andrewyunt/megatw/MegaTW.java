@@ -28,15 +28,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import com.andrewyunt.megatw.command.BloodToggleCommand;
-import com.andrewyunt.megatw.configuration.ArenaConfiguration;
 import com.andrewyunt.megatw.configuration.SignConfiguration;
 import com.andrewyunt.megatw.db.DataSource;
 import com.andrewyunt.megatw.db.MySQLSource;
 import com.andrewyunt.megatw.listeners.PlayerListener;
-import com.andrewyunt.megatw.managers.EventManager;
 import com.andrewyunt.megatw.managers.PlayerManager;
+import com.andrewyunt.megatw.managers.ServerManager;
 import com.andrewyunt.megatw.managers.SignManager;
 import com.andrewyunt.megatw.menu.ClassSelectorMenu;
 import com.andrewyunt.megatw.menu.GeneralMenu;
@@ -64,14 +62,14 @@ public class MegaTW extends JavaPlugin {
     private final LayoutEditorMenu layoutEditorMenu = new LayoutEditorMenu();
     private final GeneralMenu generalMenu = new GeneralMenu();
     private final Map<Integer, ItemStack> hotbarItems = new HashMap<Integer, ItemStack>();
-	private final PlayerManager playerManager = new PlayerManager();
-	private final EventManager eventManager = new EventManager();
-	private final SignManager signManager = new SignManager();
-	private final ArenaConfiguration arenaConfiguration = new ArenaConfiguration();
 	private final SignConfiguration signConfiguration = new SignConfiguration();
 	private final DataSource dataSource = new MySQLSource();
 	
-	private static MegaTW instance = null;
+	private PlayerManager playerManager;
+	private SignManager signManager;
+	private ServerManager serverManager;
+	
+	private static MegaTW instance;
 	
 	/**
 	 * Method is executed while the plugin is being enabled.
@@ -85,19 +83,18 @@ public class MegaTW extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		
+		/* Set static instance to this */
+		instance = this;
+		
 		/* Check for dependencies */
-		if (pm.getPlugin("StaffPlus") == null || pm.getPlugin("ProtocolLib") == null) {
+		if (pm.getPlugin("StaffPlus") == null) {
 			logger.severe("MegaTW is missing one or more dependencies, shutting down...");
 			pm.disablePlugin(this);
 			return;
 		}
 		
-		/* Set static instance to this */
-		instance = this;
-		
 		/* Save default configs to plugin folder */
 		saveDefaultConfig();
-		arenaConfiguration.saveDefaultConfig();
 		signConfiguration.saveDefaultConfig();
 		
 		/* Connect to the database */
@@ -109,20 +106,29 @@ public class MegaTW extends JavaPlugin {
 		
 		dataSource.updateDB();
 		
+		/* Set managers */
+		playerManager = new PlayerManager();
+		signManager = new SignManager();
+		serverManager = new ServerManager();
+		
+		/* Load all servers from config.yml */
+		serverManager.loadServers();
+		
+		/* Load all signs from signs.yml */
+		signManager.loadSigns();
+		
 		/* Set command executors */
 		getCommand("bloodtoggle").setExecutor(new BloodToggleCommand());
 		
-		/* Register events */
-		eventManager.registerEffectApplyEvent();
+		/* Register BungeeCord plugin channel */
+		server.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+		server.getMessenger().registerIncomingPluginChannel(this, "BungeeCord", serverManager);
 		
 		pm.registerEvents(new PlayerListener(), this);
 		pm.registerEvents(classSelectorMenu, this);
 		pm.registerEvents(shopMenu, this);
 		pm.registerEvents(layoutEditorMenu, this);
 		pm.registerEvents(generalMenu, this);
-		
-		/* Load all signs from signs.yml */
-		signManager.loadSigns();
 		
 		/* Create hotbar items and add them to the map */
 		createHotbarItems();
@@ -139,15 +145,19 @@ public class MegaTW extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		
-		/* Save players to the database */
-		Set<GamePlayer> toSave = new HashSet<GamePlayer>();
+		try {
+			/* Save players to the database */
+			Set<GamePlayer> toSave = new HashSet<GamePlayer>();
 
-		toSave.addAll(playerManager.getPlayers());
-		
-		for (GamePlayer gp : toSave)
-			dataSource.savePlayer(gp);
-		
-		dataSource.disconnect();
+			toSave.addAll(playerManager.getPlayers());
+			
+			for (GamePlayer gp : toSave)
+				dataSource.savePlayer(gp);
+			
+			dataSource.disconnect();
+		} catch (NullPointerException e) {
+			// Plugin was not connected to the database, so don't save players
+		}
 	}
 	
 	/**
@@ -184,14 +194,14 @@ public class MegaTW extends JavaPlugin {
 	}
 	
 	/**
-	 * Gets the instance of the ArenaConfiguration class.
+	 * Gets the instance of the ServerManager class.
 	 * 
 	 * @return
-	 * 		Instance of the ArenaConfiguration class.
+	 * 		Instance of the ServerManager class.
 	 */
-	public ArenaConfiguration getArenaConfig() {
+	public ServerManager getServerManager() {
 		
-		return arenaConfiguration;
+		return serverManager;
 	}
 	
 	/**
