@@ -19,8 +19,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.scheduler.BukkitScheduler;
-
 import com.andrewyunt.megatw.MegaTW;
 import com.andrewyunt.megatw.exception.PlayerException;
 import com.andrewyunt.megatw.objects.GamePlayer;
@@ -51,8 +49,7 @@ public class PlayerManager {
 
 		GamePlayer player = new GamePlayer(name);
 
-		BukkitScheduler scheduler = MegaTW.getInstance().getServer().getScheduler();
-        scheduler.runTaskAsynchronously(MegaTW.getInstance(), () -> MegaTW.getInstance().getDataSource().loadPlayer(player));
+		MegaTW.getInstance().getDataSource().loadPlayer(player);
 		
 		players.put(name, player);
 
@@ -72,8 +69,7 @@ public class PlayerManager {
 		if (!players.containsKey(player.getName()))
 			throw new PlayerException("The player specified is not in the plugin's records.");
 		
-		BukkitScheduler scheduler = MegaTW.getInstance().getServer().getScheduler();
-        scheduler.runTaskAsynchronously(MegaTW.getInstance(), () -> MegaTW.getInstance().getDataSource().savePlayer(player));
+		MegaTW.getInstance().getDataSource().savePlayer(player);
 		
 		players.remove(player.getName());
 	}
