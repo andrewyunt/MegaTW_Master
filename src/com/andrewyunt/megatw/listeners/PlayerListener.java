@@ -123,18 +123,10 @@ public class PlayerListener implements Listener {
 		} catch (PlayerException e) {
 		}
 
-		if (name.equals(ChatColor.AQUA + "General")) {
-
+		if (name.equals(ChatColor.AQUA + "General"))
 			plugin.getGeneralMenu().openMainMenu(gp);
-
-		} else if (name.equals(ChatColor.GREEN + "Class Selector")) {
-			
+		else if (name.equals(ChatColor.GREEN + "Class Selector"))
 			plugin.getClassSelectorMenu().openMainMenu(gp);
-			
-		} else if (name.equals("Play : MegaTW")) {
-			
-			
-		}
 	}
 
 	@EventHandler
