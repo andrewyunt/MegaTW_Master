@@ -126,9 +126,9 @@ public class PlayerListener implements Listener {
 		} catch (PlayerException e) {
 		}
 
-		if (name.equals(ChatColor.AQUA + "General")) {
-
+		if (name.equals(ChatColor.AQUA + "General"))
 			plugin.getGeneralMenu().openMainMenu(gp);
+<<<<<<< HEAD:src/com/andrewyunt/megatw_master/listeners/PlayerListener.java
 
 		} else if (name.equals(ChatColor.GREEN + "Class Selector")) {
 			
@@ -138,6 +138,10 @@ public class PlayerListener implements Listener {
 			
 			
 		}
+=======
+		else if (name.equals(ChatColor.GREEN + "Class Selector"))
+			plugin.getClassSelectorMenu().openMainMenu(gp);
+>>>>>>> origin/master:src/com/andrewyunt/megatw/listeners/PlayerListener.java
 	}
 
 	@EventHandler

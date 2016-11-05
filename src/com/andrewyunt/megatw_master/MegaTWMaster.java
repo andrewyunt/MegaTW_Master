@@ -206,27 +206,22 @@ public class MegaTWMaster extends JavaPlugin {
 		/* Create items */
 		ItemStack general = new ItemStack(Material.BOOK);
 		ItemStack classSelector = new ItemStack(Material.COMMAND);
-		ItemStack play = new ItemStack(Material.DIAMOND_SWORD);
 		
 		/* Get item metas */
 		ItemMeta generalMeta = general.getItemMeta();
 		ItemMeta classSelectorMeta = classSelector.getItemMeta();
-		ItemMeta playMeta = play.getItemMeta();
 		
 		/* Set meta display names */
 		generalMeta.setDisplayName(ChatColor.AQUA + "General");
 		classSelectorMeta.setDisplayName(ChatColor.GREEN + "Class Selector");
-		playMeta.setDisplayName("Play : MegaTW");
 		
 		/* Set item metas */
 		general.setItemMeta(generalMeta);
 		classSelector.setItemMeta(classSelectorMeta);
-		play.setItemMeta(playMeta);
 		
 		/* Set hotbar items in map */
 		hotbarItems.put(0, general);
 		hotbarItems.put(1, classSelector);
-		hotbarItems.put(8, Utils.addGlow(play));
 	}
 	
 	public Map<Integer, ItemStack> getHotbarItems() {
