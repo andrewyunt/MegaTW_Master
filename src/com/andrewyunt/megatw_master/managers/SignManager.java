@@ -13,17 +13,17 @@
  * APPLICABLE LAWS AND INTERNATIONAL TREATIES. THE RECEIPT OR POSSESSION OF THIS SOURCE CODE AND/OR RELATED INFORMATION DOES NOT CONVEY OR IMPLY ANY RIGHTS
  * TO REPRODUCE, DISCLOSE OR DISTRIBUTE ITS CONTENTS, OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT MAY DESCRIBE, IN WHOLE OR IN PART.
  */
-package com.andrewyunt.megatw.managers;
-
-import com.andrewyunt.megatw.MegaTW;
-import com.andrewyunt.megatw.configuration.SignConfiguration;
-import com.andrewyunt.megatw.exception.SignException;
-import com.andrewyunt.megatw.objects.GameServer;
-import com.andrewyunt.megatw.objects.SignDisplay;
-import com.andrewyunt.megatw.utilities.Utils;
+package com.andrewyunt.megatw_master.managers;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+
+import com.andrewyunt.megatw_base.utilities.Utils;
+import com.andrewyunt.megatw_master.MegaTWMaster;
+import com.andrewyunt.megatw_master.configuration.SignConfiguration;
+import com.andrewyunt.megatw_master.exception.SignException;
+import com.andrewyunt.megatw_master.objects.GameServer;
+import com.andrewyunt.megatw_master.objects.SignDisplay;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -41,7 +41,7 @@ public class SignManager {
 		
 		SignDisplay sign = new SignDisplay(
 				type,
-				Utils.getHighestEntry(MegaTW.getInstance().getSignConfig().getConfig()
+				Utils.getHighestEntry(MegaTWMaster.getInstance().getSignConfig().getConfig()
 						.getConfigurationSection("signs")) + 1,
 				loc, updateInterval, false);
 		
@@ -57,7 +57,7 @@ public class SignManager {
 
 		signs.remove(sign);
 		
-		SignConfiguration signConfig = MegaTW.getInstance().getSignConfig();
+		SignConfiguration signConfig = MegaTWMaster.getInstance().getSignConfig();
 		
 		signConfig.getConfig().set("signs." + String.valueOf(sign.getConfigNumber()), null);
 		signConfig.saveConfig();
@@ -123,10 +123,10 @@ public class SignManager {
 
 		signs.clear(); // Clear the current signs list
 
-		if (!MegaTW.getInstance().getSignConfig().getConfig().contains("signs"))
+		if (!MegaTWMaster.getInstance().getSignConfig().getConfig().contains("signs"))
 			return;
 
-		ConfigurationSection signs = MegaTW.getInstance().getSignConfig().getConfig()
+		ConfigurationSection signs = MegaTWMaster.getInstance().getSignConfig().getConfig()
 				.getConfigurationSection("signs");
 		
 		if (signs == null)

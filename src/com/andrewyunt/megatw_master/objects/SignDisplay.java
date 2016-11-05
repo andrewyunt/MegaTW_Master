@@ -13,11 +13,12 @@
  * APPLICABLE LAWS AND INTERNATIONAL TREATIES. THE RECEIPT OR POSSESSION OF THIS SOURCE CODE AND/OR RELATED INFORMATION DOES NOT CONVEY OR IMPLY ANY RIGHTS
  * TO REPRODUCE, DISCLOSE OR DISTRIBUTE ITS CONTENTS, OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT MAY DESCRIBE, IN WHOLE OR IN PART.
  */
-package com.andrewyunt.megatw.objects;
+package com.andrewyunt.megatw_master.objects;
 
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -27,11 +28,10 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import com.andrewyunt.megatw.MegaTW;
-import com.andrewyunt.megatw.exception.ServerException;
-import com.andrewyunt.megatw.utilities.Utils;
-
-import net.md_5.bungee.api.ChatColor;
+import com.andrewyunt.megatw_base.MegaTWBase;
+import com.andrewyunt.megatw_base.utilities.Utils;
+import com.andrewyunt.megatw_master.MegaTWMaster;
+import com.andrewyunt.megatw_master.exception.ServerException;
 
 /**
  * The object used to perform operations on signs in the MegaTW plugin.
@@ -72,8 +72,8 @@ public class SignDisplay {
 		if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN)
 			bukkitSign =(Sign) block.getState();
 		
-		BukkitScheduler scheduler = MegaTW.getInstance().getServer().getScheduler();
-		scheduler.scheduleSyncRepeatingTask(MegaTW.getInstance(), new Runnable() {
+		BukkitScheduler scheduler = MegaTWMaster.getInstance().getServer().getScheduler();
+		scheduler.scheduleSyncRepeatingTask(MegaTWMaster.getInstance(), new Runnable() {
 			boolean refresh = !load;
 			
 			@Override
@@ -132,7 +132,7 @@ public class SignDisplay {
 			if (place == 0)
 				return;
 			
-			Map<Integer, Entry<OfflinePlayer, Integer>> mostKills = MegaTW.getInstance().getDataSource().getMostKills();
+			Map<Integer, Entry<OfflinePlayer, Integer>> mostKills = MegaTWBase.getInstance().getDataSource().getMostKills();
 			Entry<OfflinePlayer, Integer> entry = mostKills.get(place);
 			
 			OfflinePlayer op = entry.getKey();
@@ -154,7 +154,7 @@ public class SignDisplay {
 	
 	public void save() {
 		
-		MegaTW plugin = MegaTW.getInstance();
+		MegaTWMaster plugin = MegaTWMaster.getInstance();
 		FileConfiguration signConfig = plugin.getSignConfig().getConfig();
 		
 		signConfig.set("signs." + configNumber + ".type", type.toString());
@@ -168,7 +168,7 @@ public class SignDisplay {
 		signConfig.createSection("signs." + configNumber + ".location",
 				Utils.serializeLocation(bukkitSign.getLocation()));
 		
-		MegaTW.getInstance().getSignConfig().saveConfig();
+		plugin.getSignConfig().saveConfig();
 	}
 	
 	public static SignDisplay loadFromConfig(ConfigurationSection section) {
@@ -182,8 +182,9 @@ public class SignDisplay {
 		
 		if (type == Type.SERVER)
 			try {
-				signDisplay.setServer(MegaTW.getInstance().getServerManager().getServer(section.getString("server")));
+				signDisplay.setServer(MegaTWMaster.getInstance().getServerManager().getServer(section.getString("server")));
 			} catch (ServerException e) {
+				e.printStackTrace();
 			}
 		
 		return signDisplay;

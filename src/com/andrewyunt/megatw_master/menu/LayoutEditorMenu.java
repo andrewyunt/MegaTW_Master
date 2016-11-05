@@ -13,13 +13,7 @@
  * APPLICABLE LAWS AND INTERNATIONAL TREATIES. THE RECEIPT OR POSSESSION OF THIS SOURCE CODE AND/OR RELATED INFORMATION DOES NOT CONVEY OR IMPLY ANY RIGHTS
  * TO REPRODUCE, DISCLOSE OR DISTRIBUTE ITS CONTENTS, OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT MAY DESCRIBE, IN WHOLE OR IN PART.
  */
-package com.andrewyunt.megatw.menu;
-
-import com.andrewyunt.megatw.MegaTW;
-import com.andrewyunt.megatw.exception.PlayerException;
-import com.andrewyunt.megatw.objects.Class;
-import com.andrewyunt.megatw.objects.GamePlayer;
-import com.andrewyunt.megatw.utilities.Utils;
+package com.andrewyunt.megatw_master.menu;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -34,6 +28,13 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitScheduler;
+
+import com.andrewyunt.megatw_base.objects.Class;
+import com.andrewyunt.megatw_base.MegaTWBase;
+import com.andrewyunt.megatw_base.exception.PlayerException;
+import com.andrewyunt.megatw_base.utilities.Utils;
+import com.andrewyunt.megatw_master.MegaTWMaster;
+import com.andrewyunt.megatw_master.objects.GamePlayer;
 
 import java.util.ArrayList;
 
@@ -57,8 +58,8 @@ public class LayoutEditorMenu implements Listener {
 	
 	public void openClassMenu(GamePlayer player, Class classType, boolean loadFromDB) {
 		
-		BukkitScheduler scheduler = MegaTW.getInstance().getServer().getScheduler();
-		scheduler.scheduleSyncDelayedTask(MegaTW.getInstance(), () -> player.getBukkitPlayer().getInventory().clear(), 6L);
+		BukkitScheduler scheduler = MegaTWBase.getInstance().getServer().getScheduler();
+		scheduler.scheduleSyncDelayedTask(MegaTWBase.getInstance(), () -> player.getBukkitPlayer().getInventory().clear(), 6L);
 		
 		inv = Bukkit.createInventory(null, 45, "Layout Editor - " + classType.getName());
 		
@@ -112,12 +113,10 @@ public class LayoutEditorMenu implements Listener {
 		}
 		
 		if (currentItem.getType() == Material.AIR && event.getCursor().getType() == Material.AIR) {
-			BukkitScheduler scheduler = MegaTW.getInstance().getServer().getScheduler();
-			scheduler.scheduleSyncDelayedTask(MegaTW.getInstance(), () -> {
-
-                try  {
-                    for (ItemStack hotbarItem : MegaTW.getInstance().getHotbarItems().values()) {
-
+			BukkitScheduler scheduler = MegaTWMaster.getInstance().getServer().getScheduler();
+			scheduler.scheduleSyncDelayedTask(MegaTWMaster.getInstance(), () -> {
+				try  {
+                    for (ItemStack hotbarItem : MegaTWMaster.getInstance().getHotbarItems().values()) {
                         ItemMeta hotbarMeta = hotbarItem.getItemMeta();
 
                         if (hotbarMeta == null)
@@ -132,7 +131,7 @@ public class LayoutEditorMenu implements Listener {
                             continue;
 
                         clickedInventory.setItem(event.getSlot(), new ItemStack(Material.AIR));
-                        MegaTW.getInstance().getPlayerManager().getPlayer(event.getWhoClicked()
+                        MegaTWMaster.getInstance().getPlayerManager().getPlayer(event.getWhoClicked()
                                 .getName()).updateHotbar();
                         break;
                     }
@@ -160,7 +159,7 @@ public class LayoutEditorMenu implements Listener {
 
 		String name = is.getItemMeta().getDisplayName();
 		
-		for (ItemStack hotbarItem : MegaTW.getInstance().getHotbarItems().values()) {
+		for (ItemStack hotbarItem : MegaTWMaster.getInstance().getHotbarItems().values()) {
 			if (!name.equals(hotbarItem.getItemMeta().getDisplayName()))
 				continue;
 			
@@ -186,11 +185,11 @@ public class LayoutEditorMenu implements Listener {
 		}
 		
 		try {
-			final GamePlayer gp = MegaTW.getInstance().getPlayerManager().getPlayer(player.getName());
+			final GamePlayer gp = MegaTWMaster.getInstance().getPlayerManager().getPlayer(player.getName());
 			
 			if (name.equals("Go Back")) {
 				if (title.startsWith("Layout Editor -")) {
-					MegaTW.getInstance().getGeneralMenu().openClassMenu(gp,
+					MegaTWMaster.getInstance().getGeneralMenu().openClassMenu(gp,
 							Class.valueOf(title.replace("Layout Editor - ", "").replace(" ", "_").toUpperCase()));
 					event.setCancelled(true);
 				}
@@ -208,14 +207,14 @@ public class LayoutEditorMenu implements Listener {
 			
 			event.setCancelled(true);
 			
-			BukkitScheduler scheduler = MegaTW.getInstance().getServer().getScheduler();
-			scheduler.scheduleSyncDelayedTask(MegaTW.getInstance(), () -> {
-
-                try  {
-                    openClassMenu(gp, Class.valueOf(name.replace(" ", "_").toUpperCase()), true);
-                } catch (IllegalArgumentException e) {
-                }
-            }, 1L);
+			BukkitScheduler scheduler = MegaTWMaster.getInstance().getServer().getScheduler();
+			scheduler.scheduleSyncDelayedTask(MegaTWMaster.getInstance(), () -> {
+				try  {
+					openClassMenu(gp, Class.valueOf(name.replace(" ", "_").toUpperCase()), true);
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				}
+			}, 1L);
 		} catch (PlayerException e) {
 		}
 	}
@@ -232,12 +231,12 @@ public class LayoutEditorMenu implements Listener {
 		Class classType = Class.valueOf(title.split("\\-", -1)[1].toUpperCase().substring(1).replace(' ', '_'));
 		
 		try {
-			final GamePlayer gp = MegaTW.getInstance().getPlayerManager().getPlayer(event.getPlayer().getName());
+			final GamePlayer gp = MegaTWMaster.getInstance().getPlayerManager().getPlayer(event.getPlayer().getName());
 			
-			MegaTW.getInstance().getDataSource().saveLayout(gp, classType, Utils.fromChest(inv));
+			MegaTWBase.getInstance().getDataSource().saveLayout(gp, classType, Utils.fromChest(inv));
 			
-	        BukkitScheduler scheduler = MegaTW.getInstance().getServer().getScheduler();
-	        scheduler.scheduleSyncDelayedTask(MegaTW.getInstance(), gp::updateHotbar, 5L);
+			BukkitScheduler scheduler = MegaTWMaster.getInstance().getServer().getScheduler();
+			scheduler.scheduleSyncDelayedTask(MegaTWMaster.getInstance(), gp::updateHotbar, 5L);
 		} catch (PlayerException e) {
 		}
 	}

@@ -13,30 +13,24 @@
  * APPLICABLE LAWS AND INTERNATIONAL TREATIES. THE RECEIPT OR POSSESSION OF THIS SOURCE CODE AND/OR RELATED INFORMATION DOES NOT CONVEY OR IMPLY ANY RIGHTS
  * TO REPRODUCE, DISCLOSE OR DISTRIBUTE ITS CONTENTS, OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT MAY DESCRIBE, IN WHOLE OR IN PART.
  */
-package com.andrewyunt.megatw.objects;
+package com.andrewyunt.megatw_master.exception;
 
-public class GameServer{
+/**
+ * The exception which is used when an error occurs with the GameServer object.
+ * 
+ * @author Andrew Yunt
+ */
+public class ServerException extends Exception {
 	
-	private String name;
-	private int playerCount;
-	
-	public GameServer(String name) {
-		
-		this.name = name;
-	}
-	
-	public String getName() {
-		
-		return name;
-	}
+	private static final long serialVersionUID = 5746846866473140158L;
 
-	public void setPlayerCount(int playerCount) {
+	public ServerException() {
 		
-		this.playerCount = playerCount;
+		super("An exception occured while conducting an operation on a server.");
 	}
 	
-	public int getPlayerCount() {
+	public ServerException(String message) {
 		
-		return playerCount;
+		super(message);
 	}
 }

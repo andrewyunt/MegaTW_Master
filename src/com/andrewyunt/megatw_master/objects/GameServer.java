@@ -13,24 +13,30 @@
  * APPLICABLE LAWS AND INTERNATIONAL TREATIES. THE RECEIPT OR POSSESSION OF THIS SOURCE CODE AND/OR RELATED INFORMATION DOES NOT CONVEY OR IMPLY ANY RIGHTS
  * TO REPRODUCE, DISCLOSE OR DISTRIBUTE ITS CONTENTS, OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT MAY DESCRIBE, IN WHOLE OR IN PART.
  */
-package com.andrewyunt.megatw.exception;
+package com.andrewyunt.megatw_master.objects;
 
-/**
- * The exception which is used when an error occurs with the SignDisplay object.
- * 
- * @author Andrew Yunt
- */
-public class SignException extends Exception {
-
-	private static final long serialVersionUID = 8364007684590051100L;
-
-	public SignException() {
+public class GameServer{
+	
+	private String name;
+	private int playerCount;
+	
+	public GameServer(String name) {
 		
-		super("An exception occured while conducting an operation on a sign.");
+		this.name = name;
 	}
 	
-	public SignException(String message) {
+	public String getName() {
 		
-		super(message);
+		return name;
+	}
+
+	public void setPlayerCount(int playerCount) {
+		
+		this.playerCount = playerCount;
+	}
+	
+	public int getPlayerCount() {
+		
+		return playerCount;
 	}
 }

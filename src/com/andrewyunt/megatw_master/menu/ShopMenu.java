@@ -13,7 +13,7 @@
  * APPLICABLE LAWS AND INTERNATIONAL TREATIES. THE RECEIPT OR POSSESSION OF THIS SOURCE CODE AND/OR RELATED INFORMATION DOES NOT CONVEY OR IMPLY ANY RIGHTS
  * TO REPRODUCE, DISCLOSE OR DISTRIBUTE ITS CONTENTS, OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT MAY DESCRIBE, IN WHOLE OR IN PART.
  */
-package com.andrewyunt.megatw.menu;
+package com.andrewyunt.megatw_master.menu;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,14 +32,14 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.andrewyunt.megatw.MegaTW;
-import com.andrewyunt.megatw.exception.PlayerException;
-import com.andrewyunt.megatw.objects.Ability;
-import com.andrewyunt.megatw.objects.Class;
-import com.andrewyunt.megatw.objects.GamePlayer;
-import com.andrewyunt.megatw.objects.Skill;
-import com.andrewyunt.megatw.objects.Upgradable;
-import com.andrewyunt.megatw.utilities.Utils;
+import com.andrewyunt.megatw_base.objects.Class;
+import com.andrewyunt.megatw_base.exception.PlayerException;
+import com.andrewyunt.megatw_base.objects.Ability;
+import com.andrewyunt.megatw_base.objects.Skill;
+import com.andrewyunt.megatw_base.objects.Upgradable;
+import com.andrewyunt.megatw_base.utilities.Utils;
+import com.andrewyunt.megatw_master.MegaTWMaster;
+import com.andrewyunt.megatw_master.objects.GamePlayer;
 
 /**
  * The class used to create instances of the shop menu.
@@ -72,7 +72,7 @@ public class ShopMenu implements Listener {
 		int skillTwoLevel = player.getLevel(skillTwo);
 		int kitLevel = player.getLevel(classType);
 		
-		FileConfiguration config = MegaTW.getInstance().getConfig();
+		FileConfiguration config = MegaTWMaster.getInstance().getConfig();
 
 		List<String> lines = new ArrayList<String>();
 		lines.add(ability.toString());
@@ -128,8 +128,8 @@ public class ShopMenu implements Listener {
 
 				ChatColor color = null;
 				int cost = classType.isHero() ? 
-						MegaTW.getInstance().getConfig().getInt("tier-" + String.valueOf(curLevel) + "-hero-upgrade-cost")
-						: MegaTW.getInstance().getConfig().getInt("tier-" + String.valueOf(curLevel) + "-upgrade-cost");
+						MegaTWMaster.getInstance().getConfig().getInt("tier-" + String.valueOf(curLevel) + "-hero-upgrade-cost")
+						: MegaTWMaster.getInstance().getConfig().getInt("tier-" + String.valueOf(curLevel) + "-upgrade-cost");
 				
 				if (available) {
 					is = new ItemStack(Material.STAINED_CLAY, 1, (short) 14);
@@ -213,14 +213,14 @@ public class ShopMenu implements Listener {
 		GamePlayer gp = null;
 
 		try {
-			gp = MegaTW.getInstance().getPlayerManager().getPlayer(player.getName());
+			gp = MegaTWMaster.getInstance().getPlayerManager().getPlayer(player.getName());
 		} catch (PlayerException e) {
 		}
 		
 		Class classType = Class.valueOf(title.split("\\-", -1)[1].toUpperCase().substring(1).replace(' ', '_'));
 		
 		if (is.getType() == Material.ARROW) {
-			MegaTW.getInstance().getGeneralMenu().openClassMenu(gp, classType);
+			MegaTWMaster.getInstance().getGeneralMenu().openClassMenu(gp, classType);
 			return;
 		}
 		
@@ -253,8 +253,8 @@ public class ShopMenu implements Listener {
 		}
 		
 		int cost = classType.isHero() ? 
-				MegaTW.getInstance().getConfig().getInt("tier-" + String.valueOf(slot) + "-hero-upgrade-cost")
-				: MegaTW.getInstance().getConfig().getInt("tier-" + String.valueOf(slot) + "-upgrade-cost");
+				MegaTWMaster.getInstance().getConfig().getInt("tier-" + String.valueOf(slot) + "-hero-upgrade-cost")
+				: MegaTWMaster.getInstance().getConfig().getInt("tier-" + String.valueOf(slot) + "-upgrade-cost");
 		
 		gp.removeCoins(cost);
 		gp.setClassLevel(upgradable, slot);

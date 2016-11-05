@@ -1,7 +1,7 @@
 name: MegaTW_Master
 main: com.andrewyunt.megatw.MegaTW
 version: 1.0
-softdepend: [StaffPlus]
+depend: [MegaTW_Base]
 
 ############################################################
 # +------------------------------------------------------+ #

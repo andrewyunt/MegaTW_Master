@@ -13,20 +13,24 @@
  * APPLICABLE LAWS AND INTERNATIONAL TREATIES. THE RECEIPT OR POSSESSION OF THIS SOURCE CODE AND/OR RELATED INFORMATION DOES NOT CONVEY OR IMPLY ANY RIGHTS
  * TO REPRODUCE, DISCLOSE OR DISTRIBUTE ITS CONTENTS, OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT MAY DESCRIBE, IN WHOLE OR IN PART.
  */
-package com.andrewyunt.megatw.listeners;
+package com.andrewyunt.megatw_master.listeners;
 
-import com.andrewyunt.megatw.MegaTW;
-import com.andrewyunt.megatw.exception.PlayerException;
-import com.andrewyunt.megatw.exception.ServerException;
-import com.andrewyunt.megatw.exception.SignException;
-import com.andrewyunt.megatw.managers.SignManager;
-import com.andrewyunt.megatw.objects.GamePlayer;
-import com.andrewyunt.megatw.objects.GameServer;
-import com.andrewyunt.megatw.objects.SignDisplay;
+import com.andrewyunt.megatw_base.MegaTWBase;
+import com.andrewyunt.megatw_base.exception.PlayerException;
+import com.andrewyunt.megatw_master.MegaTWMaster;
+import com.andrewyunt.megatw_master.exception.ServerException;
+import com.andrewyunt.megatw_master.exception.SignException;
+import com.andrewyunt.megatw_master.managers.SignManager;
+import com.andrewyunt.megatw_master.objects.GamePlayer;
+import com.andrewyunt.megatw_master.objects.GameServer;
+import com.andrewyunt.megatw_master.objects.SignDisplay;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.*;
@@ -49,49 +53,48 @@ import org.bukkit.scheduler.BukkitScheduler;
  * @author Andrew Yunt
  */
 public class PlayerListener implements Listener {
-
+	
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
-
+		
 		final Player bp = event.getPlayer();
 		
-		BukkitScheduler scheduler = MegaTW.getInstance().getServer().getScheduler();
-		scheduler.scheduleSyncDelayedTask(MegaTW.getInstance(), () -> {
-
-            GamePlayer player = null;
-
-            /* Get the player's GamePlayer object and if it doesn't exist, add it */
-            try {
-                player = MegaTW.getInstance().getPlayerManager().createPlayer(bp.getName());
-            } catch (PlayerException e) {
-            }
-
-            /* Set player's scoreboard to default scoreboard */
-            player.updateScoreboard();
-
-            /* Update player hotbar */
-            player.updateHotbar();
-
-            /* Teleport the player to the spawn location */
-            Location loc = bp.getWorld().getSpawnLocation().clone();
-
-            Chunk chunk = loc.getChunk();
-
-            if (!chunk.isLoaded())
-                chunk.load();
-
-            loc.setY(loc.getY() + 1);
-
-            bp.teleport(loc, TeleportCause.COMMAND);
-        }, 1L);
+		BukkitScheduler scheduler = MegaTWMaster.getInstance().getServer().getScheduler();
+		scheduler.scheduleSyncDelayedTask(MegaTWMaster.getInstance(), () -> {
+			GamePlayer player = null;
+			
+			// Get the player's GamePlayer object and if it doesn't exist, add it
+			try {
+				player = MegaTWMaster.getInstance().getPlayerManager().createPlayer(bp.getName());
+			} catch (PlayerException e) {
+			}
+			
+			// Set player's scoreboard to default scoreboard
+			player.updateDynamicScoreboard();
+			
+			// Update player hotbar */
+			player.updateHotbar();
+			
+			// Teleport the player to the spawn location
+			Location loc = bp.getWorld().getSpawnLocation().clone();
+			
+			Chunk chunk = loc.getChunk();
+			
+			if (!chunk.isLoaded())
+				chunk.load();
+			
+			loc.setY(loc.getY() + 1);
+			
+			bp.teleport(loc, TeleportCause.COMMAND);
+		}, 1L);
 	}
 
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		
 		try {
-			GamePlayer gp = MegaTW.getInstance().getPlayerManager().getPlayer(event.getPlayer().getName());
-			MegaTW.getInstance().getPlayerManager().deletePlayer(gp);
+			GamePlayer gp = MegaTWMaster.getInstance().getPlayerManager().getPlayer(event.getPlayer().getName());
+			MegaTWMaster.getInstance().getPlayerManager().deletePlayer(gp);
 		} catch (PlayerException e) {
 		}
 	}
@@ -116,7 +119,7 @@ public class PlayerListener implements Listener {
 		String name = meta.getDisplayName();
 		Player player = event.getPlayer();
 		GamePlayer gp = null;
-		MegaTW plugin = MegaTW.getInstance();
+		MegaTWMaster plugin = MegaTWMaster.getInstance();
 
 		try {
 			gp = plugin.getPlayerManager().getPlayer(player.getName());
@@ -129,35 +132,11 @@ public class PlayerListener implements Listener {
 
 		} else if (name.equals(ChatColor.GREEN + "Class Selector")) {
 			
-			plugin.getClassSelectorMenu().openMainMenu(gp);
+			MegaTWBase.getInstance().getClassSelectorMenu().openMainMenu(gp);
 			
 		} else if (name.equals("Play : MegaTW")) {
 			
 			
-		}
-	}
-
-	@EventHandler
-	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-
-		GamePlayer player = null;
-
-		try {
-			player = MegaTW.getInstance().getPlayerManager().getPlayer(event.getPlayer().getName());
-		} catch (PlayerException e) {
-		}
-
-		String message = event.getMessage();
-
-		if (message.startsWith("/tp") && !(message.equalsIgnoreCase("/tps"))) {
-
-			if (!(player.isStaffMode())) {
-				player.getBukkitPlayer()
-						.sendMessage(ChatColor.RED + "You must enter staff mode before using that command.");
-				player.getBukkitPlayer().sendMessage(ChatColor.RED + "Usage: /staff");
-				event.setCancelled(true);
-			}
-
 		}
 	}
 
@@ -196,7 +175,7 @@ public class PlayerListener implements Listener {
 			type = SignDisplay.Type.SERVER;
 			
 			try {
-				server = MegaTW.getInstance().getServerManager().getServer(event.getLine(1));
+				server = MegaTWMaster.getInstance().getServerManager().getServer(event.getLine(1));
 			} catch (ServerException e) {
 				player.sendMessage(String.format("The server %s is not registered in the config.",
 						event.getLine(1)));
@@ -212,7 +191,7 @@ public class PlayerListener implements Listener {
 		SignDisplay sign = null;
 		
 		try {
-			sign = MegaTW.getInstance().getSignManager().createSign(
+			sign = MegaTWMaster.getInstance().getSignManager().createSign(
 					type,
 					event.getBlock().getLocation(),
 					6000L);
@@ -250,7 +229,7 @@ public class PlayerListener implements Listener {
 		ByteArrayDataOutput out = ByteStreams.newDataOutput();
 		out.writeUTF("Connect");
 		out.writeUTF(ChatColor.stripColor(sign.getLine(1)));
-		event.getPlayer().sendPluginMessage(MegaTW.getInstance(), "BungeeCord", out.toByteArray());
+		event.getPlayer().sendPluginMessage(MegaTWMaster.getInstance(), "BungeeCord", out.toByteArray());
 	}
 	
 	@EventHandler
@@ -261,7 +240,7 @@ public class PlayerListener implements Listener {
 		if (block.getType() != Material.SIGN_POST && block.getType() != Material.WALL_SIGN)
 			return;
 		
-		SignManager signManager = MegaTW.getInstance().getSignManager();
+		SignManager signManager = MegaTWMaster.getInstance().getSignManager();
 		
 		try {
 			signManager.deleteSign(signManager.getSign(block.getLocation()));

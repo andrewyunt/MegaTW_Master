@@ -13,15 +13,17 @@
  * APPLICABLE LAWS AND INTERNATIONAL TREATIES. THE RECEIPT OR POSSESSION OF THIS SOURCE CODE AND/OR RELATED INFORMATION DOES NOT CONVEY OR IMPLY ANY RIGHTS
  * TO REPRODUCE, DISCLOSE OR DISTRIBUTE ITS CONTENTS, OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT MAY DESCRIBE, IN WHOLE OR IN PART.
  */
-package com.andrewyunt.megatw.managers;
+package com.andrewyunt.megatw_master.managers;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.andrewyunt.megatw.MegaTW;
-import com.andrewyunt.megatw.exception.PlayerException;
-import com.andrewyunt.megatw.objects.GamePlayer;
+import org.bukkit.entity.Player;
+
+import com.andrewyunt.megatw_base.MegaTWBase;
+import com.andrewyunt.megatw_base.exception.PlayerException;
+import com.andrewyunt.megatw_master.objects.GamePlayer;
 
 /**
  * The class used to cache players, create players, and perform operations on them.
@@ -49,7 +51,7 @@ public class PlayerManager {
 
 		GamePlayer player = new GamePlayer(name);
 
-		MegaTW.getInstance().getDataSource().loadPlayer(player);
+		MegaTWBase.getInstance().getDataSource().loadPlayer(player);
 		
 		players.put(name, player);
 
@@ -69,7 +71,7 @@ public class PlayerManager {
 		if (!players.containsKey(player.getName()))
 			throw new PlayerException("The player specified is not in the plugin's records.");
 		
-		MegaTW.getInstance().getDataSource().savePlayer(player);
+		MegaTWBase.getInstance().getDataSource().savePlayer(player);
 		
 		players.remove(player.getName());
 	}
@@ -102,5 +104,10 @@ public class PlayerManager {
 			throw new PlayerException("The specified player does not exist.");
 
 		return players.get(name);
+	}
+	
+	public GamePlayer getPlayer(Player player) throws PlayerException {
+		
+		return getPlayer(player.getName());
 	}
 }

@@ -13,12 +13,10 @@
  * APPLICABLE LAWS AND INTERNATIONAL TREATIES. THE RECEIPT OR POSSESSION OF THIS SOURCE CODE AND/OR RELATED INFORMATION DOES NOT CONVEY OR IMPLY ANY RIGHTS
  * TO REPRODUCE, DISCLOSE OR DISTRIBUTE ITS CONTENTS, OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT MAY DESCRIBE, IN WHOLE OR IN PART.
  */
-package com.andrewyunt.megatw;
+package com.andrewyunt.megatw_master;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
@@ -28,20 +26,16 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import com.andrewyunt.megatw.command.BloodToggleCommand;
-import com.andrewyunt.megatw.configuration.SignConfiguration;
-import com.andrewyunt.megatw.db.DataSource;
-import com.andrewyunt.megatw.db.MySQLSource;
-import com.andrewyunt.megatw.listeners.PlayerListener;
-import com.andrewyunt.megatw.managers.PlayerManager;
-import com.andrewyunt.megatw.managers.ServerManager;
-import com.andrewyunt.megatw.managers.SignManager;
-import com.andrewyunt.megatw.menu.ClassSelectorMenu;
-import com.andrewyunt.megatw.menu.GeneralMenu;
-import com.andrewyunt.megatw.menu.LayoutEditorMenu;
-import com.andrewyunt.megatw.menu.ShopMenu;
-import com.andrewyunt.megatw.objects.GamePlayer;
-import com.andrewyunt.megatw.utilities.Utils;
+
+import com.andrewyunt.megatw_base.utilities.Utils;
+import com.andrewyunt.megatw_master.configuration.SignConfiguration;
+import com.andrewyunt.megatw_master.listeners.PlayerListener;
+import com.andrewyunt.megatw_master.managers.PlayerManager;
+import com.andrewyunt.megatw_master.managers.ServerManager;
+import com.andrewyunt.megatw_master.managers.SignManager;
+import com.andrewyunt.megatw_master.menu.GeneralMenu;
+import com.andrewyunt.megatw_master.menu.LayoutEditorMenu;
+import com.andrewyunt.megatw_master.menu.ShopMenu;
 
 /**
  * The main class in the MegaTW plugin.
@@ -52,24 +46,22 @@ import com.andrewyunt.megatw.utilities.Utils;
  * 
  * @author Andrew Yunt
  */
-public class MegaTW extends JavaPlugin {
+public class MegaTWMaster extends JavaPlugin {
 	
 	private final Logger logger = getLogger();
 	private final Server server = getServer();
 	private final PluginManager pm = server.getPluginManager();
-    private final ClassSelectorMenu classSelectorMenu = new ClassSelectorMenu();
     private final ShopMenu shopMenu = new ShopMenu();
     private final LayoutEditorMenu layoutEditorMenu = new LayoutEditorMenu();
     private final GeneralMenu generalMenu = new GeneralMenu();
     private final Map<Integer, ItemStack> hotbarItems = new HashMap<Integer, ItemStack>();
 	private final SignConfiguration signConfiguration = new SignConfiguration();
-	private final DataSource dataSource = new MySQLSource();
 	
 	private PlayerManager playerManager;
 	private SignManager signManager;
 	private ServerManager serverManager;
 	
-	private static MegaTW instance;
+	private static MegaTWMaster instance;
 	
 	/**
 	 * Method is executed while the plugin is being enabled.
@@ -97,15 +89,6 @@ public class MegaTW extends JavaPlugin {
 		saveDefaultConfig();
 		signConfiguration.saveDefaultConfig();
 		
-		/* Connect to the database */
-		if (!dataSource.connect()) {
-			logger.severe("Could not connect to the database, shutting down...");
-			pm.disablePlugin(MegaTW.getInstance());
-			return;
-		}
-		
-		dataSource.updateDB();
-		
 		/* Set managers */
 		playerManager = new PlayerManager();
 		signManager = new SignManager();
@@ -117,15 +100,11 @@ public class MegaTW extends JavaPlugin {
 		/* Load all signs from signs.yml */
 		signManager.loadSigns();
 		
-		/* Set command executors */
-		getCommand("bloodtoggle").setExecutor(new BloodToggleCommand());
-		
 		/* Register BungeeCord plugin channel */
 		server.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		server.getMessenger().registerIncomingPluginChannel(this, "BungeeCord", serverManager);
 		
 		pm.registerEvents(new PlayerListener(), this);
-		pm.registerEvents(classSelectorMenu, this);
 		pm.registerEvents(shopMenu, this);
 		pm.registerEvents(layoutEditorMenu, this);
 		pm.registerEvents(generalMenu, this);
@@ -135,38 +114,12 @@ public class MegaTW extends JavaPlugin {
 	}
 	
 	/**
-	 * Method is executed while the plugin is being disabled.
-	 * 
-	 * <p>
-	 * Removes all active games and sends the shutdown message to all players
-	 * kicked from the games.
-	 * </p>
-	 */
-	@Override
-	public void onDisable() {
-		
-		try {
-			/* Save players to the database */
-			Set<GamePlayer> toSave = new HashSet<GamePlayer>();
-
-			toSave.addAll(playerManager.getPlayers());
-			
-			for (GamePlayer gp : toSave)
-				dataSource.savePlayer(gp);
-			
-			dataSource.disconnect();
-		} catch (NullPointerException e) {
-			// Plugin was not connected to the database, so don't save players
-		}
-	}
-	
-	/**
 	 * Gets the instance of the MegaTW class.
 	 * 
 	 * @return
 	 * 		Instance of the MegaTW class.
 	 */
-	public static MegaTW getInstance() {
+	public static MegaTWMaster getInstance() {
 		
 		return instance;
 	}
@@ -213,28 +166,6 @@ public class MegaTW extends JavaPlugin {
 	public SignConfiguration getSignConfig() {
 		
 		return signConfiguration;
-	}
-	
-	/**
-	 * Gets the plugin's data source.
-	 * 
-	 * @return
-	 * 		An instance that extends the DataSource class.
-	 */
-	public DataSource getDataSource() {
-		
-		return dataSource;
-	}
-	
-	/**
-	 * Gets the stored instance of the class selector menu.
-	 * 
-	 * @return
-	 * 		The instance of the class selector menu.
-	 */
-	public ClassSelectorMenu getClassSelectorMenu() {
-		
-		return classSelectorMenu;
 	}
 	
 	/**

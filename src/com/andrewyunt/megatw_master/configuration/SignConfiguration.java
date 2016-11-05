@@ -13,7 +13,7 @@
  * APPLICABLE LAWS AND INTERNATIONAL TREATIES. THE RECEIPT OR POSSESSION OF THIS SOURCE CODE AND/OR RELATED INFORMATION DOES NOT CONVEY OR IMPLY ANY RIGHTS
  * TO REPRODUCE, DISCLOSE OR DISTRIBUTE ITS CONTENTS, OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT MAY DESCRIBE, IN WHOLE OR IN PART.
  */
-package com.andrewyunt.megatw.configuration;
+package com.andrewyunt.megatw_master.configuration;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +25,7 @@ import java.util.logging.Level;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.andrewyunt.megatw.MegaTW;
+import com.andrewyunt.megatw_master.MegaTWMaster;
 
 /**
  * 
@@ -41,14 +41,14 @@ public class SignConfiguration {
 	public void reloadConfig() {
 	    
 		if (configFile == null)
-			configFile = new File(MegaTW.getInstance().getDataFolder(), "signs.yml");
+			configFile = new File(MegaTWMaster.getInstance().getDataFolder(), "signs.yml");
 
 		config = YamlConfiguration.loadConfiguration(configFile);
 
 	    Reader defConfigStream = null;
 	    
 		try {
-			defConfigStream = new InputStreamReader(MegaTW.getInstance().getResource("signs.yml"), "UTF8");
+			defConfigStream = new InputStreamReader(MegaTWMaster.getInstance().getResource("signs.yml"), "UTF8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -75,16 +75,16 @@ public class SignConfiguration {
 	    try {
 	        getConfig().save(configFile);
 	    } catch (IOException ex) {
-	        MegaTW.getInstance().getLogger().log(Level.SEVERE, "Could not save config to " + configFile, ex);
+	    	MegaTWMaster.getInstance().getLogger().log(Level.SEVERE, "Could not save config to " + configFile, ex);
 	    }
 	}
 	
 	public void saveDefaultConfig() {
 		
 	    if (configFile == null)
-	        configFile = new File(MegaTW.getInstance().getDataFolder(), "signs.yml");
+	        configFile = new File(MegaTWMaster.getInstance().getDataFolder(), "signs.yml");
 	        
 	    if (!configFile.exists())
-	    	MegaTW.getInstance().saveResource("signs.yml", false);
+	    	MegaTWMaster.getInstance().saveResource("signs.yml", false);
 	}
 }

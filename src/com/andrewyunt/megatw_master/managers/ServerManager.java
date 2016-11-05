@@ -13,7 +13,7 @@
  * APPLICABLE LAWS AND INTERNATIONAL TREATIES. THE RECEIPT OR POSSESSION OF THIS SOURCE CODE AND/OR RELATED INFORMATION DOES NOT CONVEY OR IMPLY ANY RIGHTS
  * TO REPRODUCE, DISCLOSE OR DISTRIBUTE ITS CONTENTS, OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT MAY DESCRIBE, IN WHOLE OR IN PART.
  */
-package com.andrewyunt.megatw.managers;
+package com.andrewyunt.megatw_master.managers;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,10 +25,11 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import com.andrewyunt.megatw.MegaTW;
-import com.andrewyunt.megatw.exception.ServerException;
-import com.andrewyunt.megatw.objects.GameServer;
-import com.andrewyunt.megatw.objects.SignDisplay;
+import com.andrewyunt.megatw_master.MegaTWMaster;
+import com.andrewyunt.megatw_master.exception.ServerException;
+import com.andrewyunt.megatw_master.objects.GameServer;
+import com.andrewyunt.megatw_master.objects.SignDisplay;
+
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -39,13 +40,13 @@ public class ServerManager implements Listener, PluginMessageListener{
 	
 	public ServerManager() {
 		
-		BukkitScheduler scheduler = MegaTW.getInstance().getServer().getScheduler();
-		scheduler.scheduleSyncRepeatingTask(MegaTW.getInstance(), new Runnable() {
+		BukkitScheduler scheduler = MegaTWMaster.getInstance().getServer().getScheduler();
+		scheduler.scheduleSyncRepeatingTask(MegaTWMaster.getInstance(), new Runnable() {
 			@Override
 			public void run() {
 				
 				for (Map.Entry<String, GameServer> entry : servers.entrySet()) {
-					Player[] onlinePlayers = MegaTW.getInstance().getServer().getOnlinePlayers();
+					Player[] onlinePlayers = MegaTWMaster.getInstance().getServer().getOnlinePlayers();
 					
 					if (onlinePlayers.length == 0)
 						return;
@@ -55,7 +56,7 @@ public class ServerManager implements Listener, PluginMessageListener{
 					out.writeUTF("PlayerCount");
 					out.writeUTF(entry.getKey());
 					
-					onlinePlayers[0].sendPluginMessage((Plugin) MegaTW.getInstance(), "BungeeCord", out.toByteArray());
+					onlinePlayers[0].sendPluginMessage((Plugin) MegaTWMaster.getInstance(), "BungeeCord", out.toByteArray());
 				}
 			}
 		}, 0L, 20L);
@@ -112,13 +113,13 @@ public class ServerManager implements Listener, PluginMessageListener{
 		
 		server.setPlayerCount(in.readInt());
 		
-		for (SignDisplay sign : MegaTW.getInstance().getSignManager().getServerSigns(server))
+		for (SignDisplay sign : MegaTWMaster.getInstance().getSignManager().getServerSigns(server))
 			sign.refresh();
 	}
 	
 	public void loadServers() {
 		
-		for (String name : MegaTW.getInstance().getConfig().getStringList("servers"))
+		for (String name : MegaTWMaster.getInstance().getConfig().getStringList("servers"))
 			servers.put(name, new GameServer(name));
 	}
 }

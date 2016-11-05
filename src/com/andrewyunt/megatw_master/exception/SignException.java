@@ -13,32 +13,24 @@
  * APPLICABLE LAWS AND INTERNATIONAL TREATIES. THE RECEIPT OR POSSESSION OF THIS SOURCE CODE AND/OR RELATED INFORMATION DOES NOT CONVEY OR IMPLY ANY RIGHTS
  * TO REPRODUCE, DISCLOSE OR DISTRIBUTE ITS CONTENTS, OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT MAY DESCRIBE, IN WHOLE OR IN PART.
  */
-package com.andrewyunt.megatw.objects;
+package com.andrewyunt.megatw_master.exception;
 
 /**
- * The enumeration for abilities, their names, and the method to use them.
+ * The exception which is used when an error occurs with the SignDisplay object.
  * 
  * @author Andrew Yunt
  */
-public enum Ability implements Upgradable {
+public class SignException extends Exception {
 
-	HEAL("Heal"),
-	EXPLOSIVE_ARROW("Explosive Arrow"),
-	LIGHTNING("Lightning"),
-	EXPLODE("Explode"),
-	TORNADO("Tornado"),
-	WITHER_HEADS("Master's Attack");
+	private static final long serialVersionUID = 8364007684590051100L;
 
-	private String name;
-
-	Ability(String name) {
-
-		this.name = name;
+	public SignException() {
+		
+		super("An exception occured while conducting an operation on a sign.");
 	}
-
-	@Override
-	public String getName() {
-
-		return name;
+	
+	public SignException(String message) {
+		
+		super(message);
 	}
 }
