@@ -128,20 +128,12 @@ public class PlayerListener implements Listener {
 
 		if (name.equals(ChatColor.AQUA + "General"))
 			plugin.getGeneralMenu().openMainMenu(gp);
-<<<<<<< HEAD:src/com/andrewyunt/megatw_master/listeners/PlayerListener.java
-
-		} else if (name.equals(ChatColor.GREEN + "Class Selector")) {
+		else if (name.equals(ChatColor.GREEN + "Class Selector"))
 			
 			MegaTWBase.getInstance().getClassSelectorMenu().openMainMenu(gp);
 			
-		} else if (name.equals("Play : MegaTW")) {
-			
-			
-		}
-=======
 		else if (name.equals(ChatColor.GREEN + "Class Selector"))
-			plugin.getClassSelectorMenu().openMainMenu(gp);
->>>>>>> origin/master:src/com/andrewyunt/megatw/listeners/PlayerListener.java
+			MegaTWBase.getInstance().getClassSelectorMenu().openMainMenu(gp);
 	}
 
 	@EventHandler

@@ -53,7 +53,11 @@ public class PlayerManager {
 
 		MegaTWBase.getInstance().getDataSource().loadPlayer(player);
 		
+		// Add player to plugin's player map
 		players.put(name, player);
+		
+		// Add player to base plugin's player map
+		MegaTWBase.getInstance().getPlayers().put(name, (GamePlayer) player);
 
 		return player;
 	}

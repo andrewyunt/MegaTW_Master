@@ -27,7 +27,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.andrewyunt.megatw_base.utilities.Utils;
 import com.andrewyunt.megatw_master.configuration.SignConfiguration;
 import com.andrewyunt.megatw_master.listeners.PlayerListener;
 import com.andrewyunt.megatw_master.managers.PlayerManager;
