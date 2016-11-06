@@ -5,7 +5,7 @@ database-name: MegaTW
 database-user: user
 database-pass: password
 
-# BungeeCord servers that players can connect to using the lobby sword and signs
+# BungeeCord servers that players can connect to using the lobby signs
 servers: []
 
 # Coins needed for each tier upgrade (Tier 1 is not included as it is default)

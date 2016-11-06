@@ -1,17 +1,7 @@
 name: MegaTW_Master
-main: com.andrewyunt.megatw.MegaTW
+main: com.andrewyunt.megatw_master.MegaTWMaster
 version: 1.0
 depend: [MegaTW_Base]
-
-############################################################
-# +------------------------------------------------------+ #
-# |                       Commands                       | #
-# +------------------------------------------------------+ #
-############################################################
-commands:
-  bloodtoggle:
-    description: Toggle blood particles on or off..
-    permission: megatw.bloodtoggle
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -27,6 +17,3 @@ permissions:
        megatw.deletearena: true
        megatw.addspawn: true
        megatw.removespawn: true
-   megatw.bloodtoggle:
-     description: Allows you to toggle blood particles on or off.
-     default: true

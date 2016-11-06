@@ -66,19 +66,23 @@ public class ShopMenu implements Listener {
 		Ability ability = classType.getAbility();
 		Skill skillOne = classType.getSkillOne();
 		Skill skillTwo = classType.getSkillTwo();
+		Skill gatheringTalent = classType.getGatheringTalent();
 		
 		int abilityLevel = player.getLevel(ability);
 		int skillOneLevel = player.getLevel(skillOne);
 		int skillTwoLevel = player.getLevel(skillTwo);
 		int kitLevel = player.getLevel(classType);
+		int gatheringTalentLevel = player.getLevel(gatheringTalent);
 		
 		FileConfiguration config = MegaTWMaster.getInstance().getConfig();
 
-		List<String> lines = new ArrayList<String>();
-		lines.add(ability.toString());
-		lines.add(skillOne.toString());
-		lines.add(skillTwo.toString());
-		lines.add(classType.toString());
+		String[] lines = new String[] {
+				ability.toString(),
+				skillOne.toString(),
+				skillTwo.toString(),
+				classType.toString(),
+				gatheringTalent.toString()
+		};
 		
 		int pass = 0;
 		
@@ -105,6 +109,11 @@ public class ShopMenu implements Listener {
 					level = kitLevel;
 					i = 27;
 					curLevel = i - 26;
+					break;
+				case 4:
+					level = gatheringTalentLevel;
+					i = 36;
+					curLevel = i - 35;
 					break;
 			}
 			
@@ -250,6 +259,9 @@ public class ShopMenu implements Listener {
 		} else if (27 <= slot && slot < 36) {
 			slot = slot - 26;
 			upgradable = classType;
+		} else if (36 <= slot && slot < 45) {
+			slot = slot - 35;
+			upgradable = classType.getGatheringTalent();
 		}
 		
 		int cost = classType.isHero() ? 
