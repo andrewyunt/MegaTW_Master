@@ -117,31 +117,59 @@ classes:
     ZOMBIE:
       1:
          title: "Kit Items - Zombie I"
-         description: "Iron Armor \nIron Sword \n4 Steak \n32 Cobblestone"
+         description: "Wood Sword \nSteak x2 \nChainmail Chestplate"
       2:
          title: "Kit Items - Zombie II"
-         description: "Iron Armor \nIron Sword \n8 Steak \n48 Cobblestone"
+         description: "Wood Sword \nSteak x2 \nChainmail Chestplate (Projectile Protection I)"
       3:
          title: "Kit Items - Zombie III"
-         description: "Iron Armor \nIron Sword \n16 Steak \n64 Cobblestone"
+         description: "Wood Sword \nSteak x2 \nIron Chestplate (Projectile Protection I)"
       4:
          title: "Kit Items - Zombie IV"
-         description: "Iron Armor \nIron Sword \n16 Steak \n64 Cobblestone \nPotion Of Heal (8 \u2764)"
+         description: "Wood Sword \nPotion of Heal (8 \u2764) \nSteak x2 \nIron Chestplate (Projectile Protection I)"
       5:
          title: "Kit Items - Zombie V"
-         description: "Iron Armor \nIron Sword \n16 Steak \n64 Cobblestone \nPotion Of Heal (8 \u2764) \nPotion Of Speed II"
+         description: "Wood Sword \nPotion of Heal (8 \u2764)\nPotion of Speed II \nSteak x3 \nIron Chestplate (Projectile Protection I)"
       6:
          title: "Kit Items - Zombie VI"
-         description: "Iron Chestplate (Protection I) \nIron Armor \nIron Sword \n16 Steak \n64 Cobblestone \nPotion Of Heal (8 \u2764) \nPotion Of Speed II"
+         description: "Stone Sword \nPotion of Heal (8 \u2764)\nPotion of Speed II \nSteak x3 \nIron Chestplate (Protection I)"
       7:
          title: "Kit Items - Zombie VII"
-         description: "Iron Chestplate (Protection I) \nIron Armor \nIron Sword \n16 Steak \n64 Cobblestone \nPotion Of Heal (8 \u2764) \n2 Potion Of Speed II"
+         description: "Stone Sword \nPotion of Heal (8 \u2764)\nPotion of Speed II x2 \nSteak x3 \nIron Chestplate (Protection I)"
       8:
          title: "Kit Items - Zombie VIII"
-         description: "Iron Chestplate (Protection II) \nIron Armor \nIron Sword \n16 Steak \n64 Cobblestone \n2 Potion Of Heal (8 \u2764) \n2 Potion Of Speed II"
+         description: "Stone Sword \nPotion of Heal (8 \u2764) x2 \nPotion of Speed II x2 \nSteak x3 \nIron Chestplate (Protection II)"
       9:
          title: "Kit Items - Zombie IX"
-         description: "Diamond Chestplate (Protection II) \nIron Armor \nIron Sword \n16 Steak \n64 Cobblestone \n2 Potion Of Heal (8 \u2764) \n2 Potion Of Speed II"
+         description: "Stone Sword \nPotion of Heal (8 \u2764) x2 \nPotion of Speed II x2 \nSteak x3 \nDiamond Chestplate (Protection II)"
+    HASTE:
+      1:
+         title: "Gathering Talent - Haste I"
+         description: "Destroying certain block's will grant you Haste I for 2 seconds."
+      2:
+         title: "Gathering Talent - Haste II"
+         description: "Destroying certain block's will grant you Haste I for 3 seconds."
+      3:
+         title: "Gathering Talent - Haste III"
+         description: "Destroying certain block's will grant you Haste I for 4 seconds."
+      4:
+         title: "Gathering Talent - Haste IV"
+         description: "Destroying certain block's will grant you Haste I for 5 seconds."
+      5:
+         title: "Gathering Talent - Haste V"
+         description: "Destroying certain block's will grant you Haste I for 6 seconds."
+      6:
+         title: "Gathering Talent - Haste VI"
+         description: "Destroying certain block's will grant you Haste I for 7 seconds."
+      7:
+         title: "Gathering Talent - Haste VII"
+         description: "Destroying certain block's will grant you Haste I for 8 seconds."
+      8:
+         title: "Gathering Talent - Haste VIII"
+         description: "Destroying certain block's will grant you Haste I for 9 seconds."
+      9:
+         title: "Gathering Talent - Haste IX"
+         description: "Destroying certain block's will grant you Haste II for 10 seconds."
   SKELETON:
     EXPLOSIVE_ARROW:
       1:
@@ -230,31 +258,59 @@ classes:
     SKELETON:
       1:
          title: "Kit Items - Skeleton I"
-         description: "Iron Armor \nStone Sword \n4 Steak \n32 Cobblestone \nBow \n32 Arrows"
+         description: "Bow \nSteak x2 \nArrow x30"
       2:
          title: "Kit Items - Skeleton II"
-         description: "Iron Armor \nStone Sword \n8 Steak \n48 Cobblestone \nBow \n48 Arrows"
+         description: "Bow \nSteak x2 \nArrow x35"
       3:
          title: "Kit Items - Skeleton III"
-         description: "Iron Armor \nStone Sword \n16 Steak \n64 Cobblestone \nBow \n64 Arrows"
+         description: "Bow \nSteak x2 \nArrow x40"
       4:
          title: "Kit Items - Skeleton IV"
-         description: "Iron Armor \nStone Sword \n16 Steak \n64 Cobblestone \nBow \n64 Arrows \nPotion Of Heal (8 \u2764)"
+         description: "Bow \nPotion Of Heal (8 \u2764) \nSteak x3 \nArrow x45"
       5:
          title: "Kit Items - Skeleton V"
-         description: "Iron Armor \nIron Sword \n16 Steak \n64 Cobblestone \nBow \n64 Arrows \nPotion Of Heal (8 \u2764) \nPotion Of Speed II"
+         description: "Bow \nPotion Of Heal (8 \u2764) \nPotion Of Speed II \nSteak x3 \nArrow x50"
       6:
          title: "Kit Items - Skeleton VI"
-         description: "Iron Armor \nIron Sword \n16 Steak \n64 Cobblestone \nBow (Power I) \n64 Arrows \nPotion Of Heal (8 \u2764) \n2 Potion Of Speed II"
+         description: "Bow (Power I) \nPotion Of Heal (8 \u2764) \nPotion Of Speed II x2 \nSteak x3 \nArrow x55"
       7:
          title: "Kit Items - Skeleton VII"
-         description: "Iron Helmet (Projectile Protection II) \nIron Armor \nIron Sword \n16 Steak \n64 Cobblestone \nBow (Power I) \n64 Arrows \nPotion Of Heal (8 \u2764) \n2 Potion Of Speed II"
+         description: "Bow (Power I) \nPotion Of Heal (8 \u2764) \nPotion Of Speed II x2 \nSteak x3 \nIron Helmet (Projectile Protection II) \nArrow x60"
       8:
          title: "Kit Items - Skeleton VIII"
-         description: "Iron Helmet (Projectile Protection III) \nIron Armor \nIron Sword \n16 Steak \n64 Cobblestone \nBow (Power I) \n64 Arrows \n2 Potion Of Heal (8 \u2764) \n2 Potion Of Speed II"
+         description: "Bow (Power I) \nPotion Of Heal (8 \u2764) x2 \nPotion Of Speed II x2 \nSteak x3 \nIron Helmet (Projectile Protection III) \nArrow x64"
       9:
          title: "Kit Items - Skeleton IX"
-         description: "Diamond Helmet (Projectile Protection IV) \nIron Armor \nIron Sword \n16 Steak \n64 Cobblestone \nBow (Power II) \n64 Arrows \n2 Potion Of Heal (8 \u2764) \n2 Potion Of Speed II"
+         description: "Bow (Power II) \nPotion Of Heal (8 \u2764) x2 \nPotion Of Speed II x2 \nSteak x3 \nDiamond Helmet (Projectile Protection IV) \nArrow x64"
+    FORTUNE:
+      1:
+         title: "Gathering Talent - Fortune I"
+         description: "Destroying ores / logs has a 20% chance to multiply them."
+      2:
+         title: "Gathering Talent - Fortune II"
+         description: "Destroying ores / logs has a 30% chance to multiply them."
+      3:
+         title: "Gathering Talent - Fortune III"
+         description: "Destroying ores / logs has a 40% chance to multiply them."
+      4:
+         title: "Gathering Talent - Fortune IV"
+         description: "Destroying ores / logs has a 50% chance to multiply them."
+      5:
+         title: "Gathering Talent - Fortune V"
+         description: "Destroying ores / logs has a 60% chance to multiply them."
+      6:
+         title: "Gathering Talent - Fortune VI"
+         description: "Destroying ores / logs has a 70% chance to multiply them."
+      7:
+         title: "Gathering Talent - Fortune VII"
+         description: "Destroying ores / logs has a 80% chance to multiply them."
+      8:
+         title: "Gathering Talent - Fortune VIII"
+         description: "Destroying ores / logs has a 90% chance to multiply them."
+      9:
+         title: "Gathering Talent - Fortune IX"
+         description: "Destroying ores / logs has a 100% chance to multiply them."
   HEROBRINE:
     LIGHTNING:
       1:
@@ -343,31 +399,59 @@ classes:
     HEROBRINE:
       1:
          title: "Kit Items - Herobrine I"
-         description: "Iron Armor \nIron Sword \n4 Steak \n32 Cobblestone"
+         description: "Stone Sword \nSteak x2"
       2:
          title: "Kit Items - Herobrine II"
-         description: "Iron Armor \nIron Sword \n8 Steak \n48 Cobblestone"
+         description: "Stone Sword \nSteak x2 \nChain Helmet"
       3:
          title: "Kit Items - Herobrine III"
-         description: "Iron Armor \nIron Sword \n16 Steak \n64 Cobblestone"
+         description: "Stone Sword \nSteak x2 \nChain Helmet (Protection I)"
       4:
          title: "Kit Items - Herobrine IV"
-         description: "Iron Armor \nIron Sword \n16 Steak \n64 Cobblestone \nPotion Of Heal (8 \u2764)"
+         description: "Stone Sword \nPotion Of Heal (8 \u2764) \nSteak x3 \nChain Helmet (Protection I)"
       5:
          title: "Kit Items - Herobrine V"
-         description: "Iron Armor \nIron Sword \n16 Steak \n64 Cobblestone \nPotion Of Heal (8 \u2764) \nPotion Of Speed II"
+         description: "Iron Sword \nPotion Of Heal (8 \u2764) \nSteak x3 \nChain Helmet (Protection I)"
       6:
          title: "Kit Items - Herobrine VI"
-         description: "Iron Armor \nIron Sword \n16 Steak \n64 Cobblestone \n2 Potion Of Heal (8 \u2764) \nPotion Of Speed II"
+         description: "Iron Sword \nPotion Of Heal (8 \u2764) \nPotion Of Speed II \nSteak x3 \nChain Helmet (Protection I)"
       7:
          title: "Kit Items - Herobrine VII"
-         description: "Iron Helmet (Protection II) \nIron Armor \nIron Sword \n16 Steak \n64 Cobblestone \n2 Potion Of Heal (8 \u2764) \nPotion Of Speed II"
+         description: "Iron Sword \nPotion Of Heal (8 \u2764) x2 \nPotion Of Speed II \nSteak x3 \nIron Helmet (Protection I)"
       8:
          title: "Kit Items - Herobrine VIII"
-         description: "Iron Helmet (Protection II) \nIron Armor \nDiamond Sword \n16 Steak \n64 Cobblestone \n2 Potion Of Heal (8 \u2764) \n2 Potion Of Speed II"
+         description: "Stone Sword (Sharpness I, Unbreaking V) \nPotion Of Heal (8 \u2764) x2 \nPotion Of Speed II x2 \nSteak x3 \nIron Helmet (Protection I)"
       9:
          title: "Kit Items - Herobrine IX"
-         description: "Iron Helmet (Protection II) \nIron Armor \nIron Sword (Sharpness I) \n16 Steak \n64 Cobblestone \n2 Potion Of Heal (8 \u2764) \n2 Potion Of Speed II"
+         description: "Iron Sword (Sharpness I, Unbreaking V) \nPotion Of Heal (8 \u2764) x2 \nPotion Of Speed II x2 \nSteak x3 \nIron Helmet (Protection II)"
+    TREASURE_HUNTER:
+      1:
+         title: "Gathering Talent - Treasure Hunter I"
+         description: "20% additional chance to find treasure's."
+      2:
+         title: "Gathering Talent - Treasure Hunter II"
+         description: "30% additional chance to find treasure's."
+      3:
+         title: "Gathering Talent - Treasure Hunter III"
+         description: "40% additional chance to find treasure's."
+      4:
+         title: "Gathering Talent - Treasure Hunter IV"
+         description: "50% additional chance to find treasure's."
+      5:
+         title: "Gathering Talent - Treasure Hunter V"
+         description: "60% additional chance to find treasure's."
+      6:
+         title: "Gathering Talent - Treasure Hunter VI"
+         description: "70% additional chance to find treasure's."
+      7:
+         title: "Gathering Talent - Treasure Hunter VII"
+         description: "80% additional chance to find treasure's."
+      8:
+         title: "Gathering Talent - Treasure Hunter VIII"
+         description: "90% additional chance to find treasure's."
+      9:
+         title: "Gathering Talent - Treasure Hunter IX"
+         description: "100% additional chance to find treasure's."
   CREEPER:
     EXPLODE:
       1:
@@ -456,31 +540,59 @@ classes:
     CREEPER:
       1:
          title: "Kit Items - Creeper I"
-         description: "Iron Armor \nIron Sword \n4 Steak \ 32 Cobblestone"
+         description: "Wood Sword \nSteak x2 \nChain Leggings (Blast Protection I)"
       2:
          title: "Kit Items - Creeper II"
-         description: "Iron Armor \nIron Sword \n8 Steak \ 48 Cobblestone"
+         description: "Wood Sword \nSteak x2 \nChain Leggings (Blast Protection II)"
       3:
          title: "Kit Items - Creeper III"
-         description: "Iron Armor \nIron Sword \n16 Steak \ 64 Cobblestone"
+         description: "Wood Sword \nSteak x2 \nIron Leggings (Blast Protection II)"
       4:
          title: "Kit Items - Creeper IV"
-         description: "Iron Armor \nIron Sword \n16 Steak \ 64 Cobblestone \nPotion Of Heal (8 \u2764)"
+         description: "Wood Sword \nPotion Of Heal (8 \u2764) \nSteak x3 \nIron Leggings (Blast Protection II)"
       5:
          title: "Kit Items - Creeper V"
-         description: "Iron Armor \nIron Sword \n16 Steak \ 64 Cobblestone \nPotion Of Heal (8 \u2764) \nPotion Of Speed II"
+         description: "Stone Sword \nPotion Of Heal (8 \u2764) \nPotion Of Speed II \nSteak x3 \nIron Leggings (Blast Protection II)"
       6:
          title: "Kit Items - Creeper VI"
-         description: "Iron Leggings (Blast Protection I) \nIron Armor \nIron Sword \n16 Steak \ 64 Cobblestone \nPotion Of Heal (8 \u2764) \nPotion Of Speed II"
+         description: "Stone Sword \nPotion Of Heal (8 \u2764) \nPotion Of Speed II x2 \nSteak x3 \nIron Leggings (Blast Protection III)"
       7:
          title: "Kit Items - Creeper VII"
-         description: "Iron Leggings (Protection I) \nIron Armor \nIron Sword \n16 Steak \ 64 Cobblestone \n2 Potion Of Heal (8 \u2764) \nPotion Of Speed II"
+         description: "Iron Sword \nPotion Of Heal (8 \u2764) \nPotion Of Speed II x2 \nSteak x3 \nIron Leggings (Blast Protection IV)"
       8:
          title: "Kit Items - Creeper VIII"
-         description: "Iron Leggings (Protection II) \nIron Armor \nIron Sword \n16 Steak \ 64 Cobblestone \n2 Potion Of Heal (8 \u2764) \n2 Potion Of Speed II"
+         description: "Iron Sword \nPotion Of Heal (8 \u2764) x2 \nPotion Of Speed II x2 \nSteak x3 \nIron Leggings (Blast Protection IV)"
       9:
          title: "Kit Items - Creeper IX"
-         description: "Diamond Leggings (Blast Protection II, Protection II) \nIron Armor \nIron Sword \n16 Steak \ 64 Cobblestone \n2 Potion Of Heal (8 \u2764) \n2 Potion Of Speed II"
+         description: "Iron Sword \nPotion Of Heal (8 \u2764) x2 \nPotion Of Speed II x2 \nSteak x3 \nDiamond Leggings (Protection I, Blast Protection IV)"
+    TNT:
+      1:
+         title: "Gathering Talent - TNT I"
+         description: "Destroying coal ore has a 7% chance to drop you a TNT."
+      2:
+         title: "Gathering Talent - TNT II"
+         description: "Destroying coal ore has a 10.5% chance to drop you a TNT."
+      3:
+         title: "Gathering Talent - TNT III"
+         description: "Destroying coal ore has a 14% chance to drop you a TNT."
+      4:
+         title: "Gathering Talent - TNT IV"
+         description: "Destroying coal ore has a 17.5% chance to drop you a TNT."
+      5:
+         title: "Gathering Talent - TNT V"
+         description: "Destroying coal ore has a 21% chance to drop you a TNT."
+      6:
+         title: "Gathering Talent - TNT VI"
+         description: "Destroying coal ore has a 24.5% chance to drop you a TNT."
+      7:
+         title: "Gathering Talent - TNT VII"
+         description: "Destroying coal ore has a 28% chance to drop you a TNT."
+      8:
+         title: "Gathering Talent - TNT VIII"
+         description: "Destroying coal ore has a 31.5% chance to drop you a TNT."
+      9:
+         title: "Gathering Talent - TNT IX"
+         description: "Destroying coal ore has a 35% chance to drop you a TNT."
   SPIRIT_WARRIOR:
     TORNADO:
       1:
@@ -569,31 +681,59 @@ classes:
     SPIRIT_WARRIOR:
       1:
          title: "Kit Items - Spirit Warrior I"
-         description: "Iron Armor \nIron Sword \n4 Steak \n32 Cobblestone"
+         description: "Wood Sword \nSteak x2"
       2:
          title: "Kit Items - Spirit Warrior II"
-         description: "Iron Armor \nIron Sword \n8 Steak \n48 Cobblestone"
+         description: "Stone Sword \nSteak x2"
       3:
          title: "Kit Items - Spirit Warrior III"
-         description: "Iron Armor \nIron Sword \n16 Steak \n64 Cobblestone"
+         description: "Iron Sword \nSteak x2"
       4:
          title: "Kit Items - Spirit Warrior IV"
-         description: "Iron Armor \nIron Sword \n16 Steak \n64 Cobblestone \nPotion Of Heal (8 \u2764)"
+         description: "Iron Sword \nPotion Of Heal (8 \u2764) \nSteak x3"
       5:
          title: "Kit Items - Spirit Warrior V"
-         description: "Iron Armor \nIron Sword \n16 Steak \n64 Cobblestone \nPotion Of Heal (8 \u2764) \nPotion Of Speed II"
+         description: "Iron Sword \nPotion Of Heal (8 \u2764) \nPotion Of Speed II \nSteak x3"
       6:
          title: "Kit Items - Spirit Warrior VI"
-         description: "Iron Boots (Protection I) \nIron Armor \nIron Sword \n16 Steak \n64 Cobblestone \nPotion Of Heal (8 \u2764) \nPotion Of Speed II"
+         description: "Iron Sword \nPotion Of Heal (8 \u2764) \nPotion Of Speed II x2 \nSteak x3 \nIron Boots (Protection I, Feather Falling I)"
       7:
          title: "Kit Items - Spirit Warrior VII"
-         description: "Iron Boots (Protection II) \nIron Armor \nIron Sword \n16 Steak \n64 Cobblestone \nPotion Of Heal (8 \u2764) \n2 Potion Of Speed II"
+         description: "Iron Sword \nPotion Of Heal (8 \u2764) \nPotion Of Speed II x2 \nSteak x3 \nDiamond Boots (Protection I, Feather Falling I)"
       8:
          title: "Kit Items - Spirit Warrior VIII"
-         description: "Iron Boots (Protection II, Feather Falling I) \nDiamond Armor \nIron Sword \n16 Steak \n64 Cobblestone \nPotion Of Heal (8 \u2764) \n2 Potion Of Speed II"
+         description: "Iron Sword \nPotion Of Heal (8 \u2764) x2 \nPotion Of Speed II x2 \nSteak x3 \nDiamond Boots (Protection II, Feather Falling II)"
       9:
          title: "Kit Items - Spirit Warrior IX"
-         description: "Diamond Boots (Protection II, Feather Falling II) \nDiamond Armor \nIron Sword \n16 Steak \n64 Cobblestone \n2 Potion Of Heal (8 \u2764) \n2 Potion Of Speed II"
+         description: "Diamond Sword \nPotion Of Heal (8 \u2764) x2 \nPotion Of Speed II x2 \nSteak x3 \nDiamond Boots (Protection II, Feather Falling II)"
+    SALVAGING:
+      1:
+         title: "Gathering Talent - Salvaging I"
+         description: "Mining Iron ore has a 2% chance to drop coal ore and log."
+      2:
+         title: "Gathering Talent - Salvaging II"
+         description: "Mining Iron ore has a 3% chance to drop coal ore and log."
+      3:
+         title: "Gathering Talent - Salvaging III"
+         description: "Mining Iron ore has a 4% chance to drop coal ore and log."
+      4:
+         title: "Gathering Talent - Salvaging IV"
+         description: "Mining Iron ore has a 5% chance to drop coal ore and log."
+      5:
+         title: "Gathering Talent - Salvaging V"
+         description: "Mining Iron ore has a 6% chance to drop coal ore and log."
+      6:
+         title: "Gathering Talent - Salvaging VI"
+         description: "Mining Iron ore has a 7% chance to drop coal ore and log."
+      7:
+         title: "Gathering Talent - Salvaging VII"
+         description: "Mining Iron ore has a 8% chance to drop coal ore and log."
+      8:
+         title: "Gathering Talent - Salvaging VIII"
+         description: "Mining Iron ore has a 9% chance to drop coal ore and log."
+      9:
+         title: "Gathering Talent - Salvaging IX"
+         description: "Mining Iron ore has a 10% chance to drop 2 coal ore's and 2 log's."
   WITHER_MINION:
     WITHER_HEADS:
       1:
@@ -682,28 +822,56 @@ classes:
     WITHER_MINION:
       1:
          title: "Kit Items - Wither Minion I"
-         description: "Iron Armor \nIron Sword \n4 Steak \n32 Cobblestone"
+         description: "Wood Sword \nSteak x2"
       2:
          title: "Kit Items - Wither Minion II"
-         description: "Iron Armor \nIron Sword \n8 Steak \n48 Cobblestone"
+         description: "Stone Sword \nSteak x2"
       3:
          title: "Kit Items - Wither Minion III"
-         description: "Iron Armor \nIron Sword \n16 Steak \n64 Cobblestone"
+         description: "Iron Sword \nSteak x2"
       4:
          title: "Kit Items - Wither Minion IV"
-         description: "Iron Armor \nIron Sword \n16 Steak \n64 Cobblestone \nPotion Of Heal (8 \u2764)"
+         description: "Iron Sword \nPotion Of Heal (8 \u2764) \nSteak x3"
       5:
          title: "Kit Items - Wither Minion V"
-         description: "Iron Armor \nIron Sword \n16 Steak \n64 Cobblestone \nPotion Of Heal (8 \u2764) \nPotion Of Speed II"
+         description: "Iron Sword \nPotion Of Heal (8 \u2764) \nPotion Of Speed II \nSteak x3"
       6:
          title: "Kit Items - Wither Minion VI"
-         description: "Iron Helmet (Protection I) \nIron Armor \nIron Sword \n16 Steak \n64 Cobblestone \nPotion Of Heal (8 \u2764) \nPotion Of Speed II"
+         description: "Iron Sword \nPotion Of Heal (8 \u2764) \nPotion Of Speed II x2 \nSteak x3"
       7:
          title: "Kit Items - Wither Minion VII"
-         description: "Iron Helmet (Protection II) \nIron Armor \nIron Sword \n16 Steak \n64 Cobblestone \nPotion Of Heal (8 \u2764) \n2 Potion Of Speed II"
+         description: "Diamond Sword \nPotion Of Heal (8 \u2764) \nPotion Of Speed II x2 \nSteak x3"
       8:
          title: "Kit Items - Wither Minion VIII"
-         description: "Iron Helmet (Protection II) \nIron Armor \nDiamond Sword \n16 Steak \n64 Cobblestone \nPotion Of Heal (8 \u2764) \n2 Potion Of Speed II"
+         description: "Diamond Sword \nPotion Of Heal (8 \u2764) x2 \nPotion Of Speed II x3 \nSteak x3"
       9:
          title: "Kit Items - Wither Minion IX"
-         description: "Diamond Helmet (Protection II) \nIron Armor \nDiamond Sword \n16 Steak \n64 Cobblestone \n2 Potion Of Heal (8 \u2764) \n2 Potion Of Speed II"
+         description: "Diamond Sword (Smite I) \nPotion Of Heal (8 \u2764) x2 \nPotion Of Speed II x3 \nSteak x3 \nDiamond Helmet (Protection II)"
+    FURNACE:
+      1:
+         title: "Gathering Talent - Furnace I"
+         description: "Mining Iron ore has a 20% chance to instantly smelt it."
+      2:
+         title: "Gathering Talent - Furnace II"
+         description: "Mining Iron ore has a 30% chance to instantly smelt it."
+      3:
+         title: "Gathering Talent - Furnace III"
+         description: "Mining Iron ore has a 40% chance to instantly smelt it."
+      4:
+         title: "Gathering Talent - Furnace IV"
+         description: "Mining Iron ore has a 50% chance to instantly smelt it."
+      5:
+         title: "Gathering Talent - Furnace V"
+         description: "Mining Iron ore has a 60% chance to instantly smelt it."
+      6:
+         title: "Gathering Talent - Furnace VI"
+         description: "Mining Iron ore has a 70% chance to instantly smelt it."
+      7:
+         title: "Gathering Talent - Furnace VII"
+         description: "Mining Iron ore has a 80% chance to instantly smelt it."
+      8:
+         title: "Gathering Talent - Furnace VIII"
+         description: "Mining Iron ore has a 90% chance to instantly smelt it."
+      9:
+         title: "Gathering Talent - Furnace IX"
+         description: "Mining Iron ore has a 100% chance to instantly smelt it."
