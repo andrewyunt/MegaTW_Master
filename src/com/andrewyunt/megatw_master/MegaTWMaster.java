@@ -77,13 +77,6 @@ public class MegaTWMaster extends JavaPlugin {
 		/* Set static instance to this */
 		instance = this;
 		
-		/* Check for dependencies */
-		if (pm.getPlugin("StaffPlus") == null) {
-			logger.severe("MegaTW is missing one or more dependencies, shutting down...");
-			pm.disablePlugin(this);
-			return;
-		}
-		
 		/* Save default configs to plugin folder */
 		saveDefaultConfig();
 		signConfiguration.saveDefaultConfig();
