@@ -16,7 +16,9 @@
 package com.andrewyunt.megatw_master;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
@@ -27,6 +29,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.andrewyunt.megatw_base.MegaTWBase;
 import com.andrewyunt.megatw_master.configuration.SignConfiguration;
 import com.andrewyunt.megatw_master.listeners.PlayerListener;
 import com.andrewyunt.megatw_master.managers.PlayerManager;
@@ -35,6 +38,7 @@ import com.andrewyunt.megatw_master.managers.SignManager;
 import com.andrewyunt.megatw_master.menu.GeneralMenu;
 import com.andrewyunt.megatw_master.menu.LayoutEditorMenu;
 import com.andrewyunt.megatw_master.menu.ShopMenu;
+import com.andrewyunt.megatw_master.objects.GamePlayer;
 
 /**
  * The main class in the MegaTW plugin.
@@ -47,7 +51,6 @@ import com.andrewyunt.megatw_master.menu.ShopMenu;
  */
 public class MegaTWMaster extends JavaPlugin {
 	
-	private final Logger logger = getLogger();
 	private final Server server = getServer();
 	private final PluginManager pm = server.getPluginManager();
     private final ShopMenu shopMenu = new ShopMenu();
@@ -64,12 +67,6 @@ public class MegaTWMaster extends JavaPlugin {
 	
 	/**
 	 * Method is executed while the plugin is being enabled.
-	 * 
-	 * <p>
-	 * Checks for dependencies, sets the static instance of the class, saves default
-	 * configuration files, sets command executors, registers events, loads arenas from
-	 * arenas.yml, creates FFA and TDM games, and creates default scoreboard.
-	 * </p>
 	 */
 	@Override
 	public void onEnable() {
@@ -103,6 +100,27 @@ public class MegaTWMaster extends JavaPlugin {
 		
 		/* Create hotbar items and add them to the map */
 		createHotbarItems();
+	}
+	
+	/**
+	 * Method is executed while the plugin is being disabled.
+	 * 
+	 * <p>
+	 * Saves all players, and disconnects from the database.
+	 * </p>
+	 */
+	@Override
+	public void onDisable() {
+		
+		// Save players to the database
+		Set<GamePlayer> toSave = new HashSet<GamePlayer>();
+		
+		toSave.addAll(playerManager.getPlayers());
+		
+		for (GamePlayer gp : toSave)
+			MegaTWBase.getInstance().getDataSource().savePlayer(gp);
+		
+		MegaTWBase.getInstance().getDataSource().disconnect();
 	}
 	
 	/**
