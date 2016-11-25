@@ -1,7 +1,7 @@
 name: MegaTW_Master
 main: com.andrewyunt.megatw_master.MegaTWMaster
 version: 1.0
-depend: [MegaTW_Base]
+depend: [MegaTW_Base,Selector]
 
 ############################################################
 # +------------------------------------------------------+ #

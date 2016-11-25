@@ -19,8 +19,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -35,9 +33,9 @@ import com.andrewyunt.megatw_master.listeners.PlayerListener;
 import com.andrewyunt.megatw_master.managers.PlayerManager;
 import com.andrewyunt.megatw_master.managers.ServerManager;
 import com.andrewyunt.megatw_master.managers.SignManager;
-import com.andrewyunt.megatw_master.menu.GeneralMenu;
-import com.andrewyunt.megatw_master.menu.LayoutEditorMenu;
 import com.andrewyunt.megatw_master.menu.ShopMenu;
+import com.andrewyunt.megatw_master.menu.LayoutEditorMenu;
+import com.andrewyunt.megatw_master.menu.UpgradesMenu;
 import com.andrewyunt.megatw_master.objects.GamePlayer;
 
 /**
@@ -53,9 +51,9 @@ public class MegaTWMaster extends JavaPlugin {
 	
 	private final Server server = getServer();
 	private final PluginManager pm = server.getPluginManager();
-    private final ShopMenu shopMenu = new ShopMenu();
+    private final UpgradesMenu upgradesMenu = new UpgradesMenu();
     private final LayoutEditorMenu layoutEditorMenu = new LayoutEditorMenu();
-    private final GeneralMenu generalMenu = new GeneralMenu();
+    private final ShopMenu shopMenu = new ShopMenu();
     private final Map<Integer, ItemStack> hotbarItems = new HashMap<Integer, ItemStack>();
 	private final SignConfiguration signConfiguration = new SignConfiguration();
 	
@@ -96,7 +94,7 @@ public class MegaTWMaster extends JavaPlugin {
 		pm.registerEvents(new PlayerListener(), this);
 		pm.registerEvents(shopMenu, this);
 		pm.registerEvents(layoutEditorMenu, this);
-		pm.registerEvents(generalMenu, this);
+		pm.registerEvents(shopMenu, this);
 		
 		/* Create hotbar items and add them to the map */
 		createHotbarItems();
@@ -179,6 +177,17 @@ public class MegaTWMaster extends JavaPlugin {
 	}
 	
 	/**
+	 * Gets the stored instance of the upgrades menu.
+	 * 
+	 * @return
+	 * 		The instance of the upgrades menu.
+	 */
+	public UpgradesMenu getUpgradesMenu() {
+		
+		return upgradesMenu;
+	}
+	
+	/**
 	 * Gets the stored instance of the shop menu.
 	 * 
 	 * @return
@@ -187,17 +196,6 @@ public class MegaTWMaster extends JavaPlugin {
 	public ShopMenu getShopMenu() {
 		
 		return shopMenu;
-	}
-	
-	/**
-	 * Gets the stored instance of the general menu.
-	 * 
-	 * @return
-	 * 		The instance of the genu menu.
-	 */
-	public GeneralMenu getGeneralMenu() {
-		
-		return generalMenu;
 	}
 	
 	/**
@@ -214,24 +212,29 @@ public class MegaTWMaster extends JavaPlugin {
 	public void createHotbarItems() {
 		
 		/* Create items */
-		ItemStack general = new ItemStack(Material.BOOK);
+		ItemStack serverSelector = new ItemStack(Material.COMPASS);
+		ItemStack shop = new ItemStack(Material.EMERALD);
 		ItemStack classSelector = new ItemStack(Material.COMMAND);
 		
 		/* Get item metas */
-		ItemMeta generalMeta = general.getItemMeta();
+		ItemMeta serverSelectorMeta = serverSelector.getItemMeta();
+		ItemMeta shopMeta = shop.getItemMeta();
 		ItemMeta classSelectorMeta = classSelector.getItemMeta();
 		
 		/* Set meta display names */
-		generalMeta.setDisplayName(ChatColor.AQUA + "General");
-		classSelectorMeta.setDisplayName(ChatColor.GREEN + "Class Selector");
+		serverSelectorMeta.setDisplayName(ChatColor.RED + "Server Selector");
+		shopMeta.setDisplayName(ChatColor.GREEN + "Shop");
+		classSelectorMeta.setDisplayName(ChatColor.YELLOW + "Class Selector");
 		
 		/* Set item metas */
-		general.setItemMeta(generalMeta);
+		serverSelector.setItemMeta(serverSelectorMeta);
+		shop.setItemMeta(shopMeta);
 		classSelector.setItemMeta(classSelectorMeta);
 		
 		/* Set hotbar items in map */
-		hotbarItems.put(0, general);
-		hotbarItems.put(1, classSelector);
+		hotbarItems.put(0, serverSelector);
+		hotbarItems.put(1, shop);
+		hotbarItems.put(2, classSelector);
 	}
 	
 	public Map<Integer, ItemStack> getHotbarItems() {

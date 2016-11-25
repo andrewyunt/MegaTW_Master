@@ -1,29 +1,11 @@
-/*
- * Unpublished Copyright (c) 2016 Andrew Yunt, All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains the property of Andrew Yunt. The intellectual and technical concepts contained
- * herein are proprietary to Andrew Yunt and may be covered by U.S. and Foreign Patents, patents in process, and are protected by trade secret or copyright law.
- * Dissemination of this information or reproduction of this material is strictly forbidden unless prior written permission is obtained
- * from Andrew Yunt. Access to the source code contained herein is hereby forbidden to anyone except current Andrew Yunt and those who have executed
- * Confidentiality and Non-disclosure agreements explicitly covering such access.
- *
- * The copyright notice above does not evidence any actual or intended publication or disclosure of this source code, which includes
- * information that is confidential and/or proprietary, and is a trade secret, of COMPANY. ANY REPRODUCTION, MODIFICATION, DISTRIBUTION, PUBLIC PERFORMANCE,
- * OR PUBLIC DISPLAY OF OR THROUGH USE OF THIS SOURCE CODE WITHOUT THE EXPRESS WRITTEN CONSENT OF ANDREW YUNT IS STRICTLY PROHIBITED, AND IN VIOLATION OF
- * APPLICABLE LAWS AND INTERNATIONAL TREATIES. THE RECEIPT OR POSSESSION OF THIS SOURCE CODE AND/OR RELATED INFORMATION DOES NOT CONVEY OR IMPLY ANY RIGHTS
- * TO REPRODUCE, DISCLOSE OR DISTRIBUTE ITS CONTENTS, OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT MAY DESCRIBE, IN WHOLE OR IN PART.
- */
 package com.andrewyunt.megatw_master.menu;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Objects;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -34,20 +16,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.andrewyunt.megatw_base.objects.Class;
 import com.andrewyunt.megatw_base.exception.PlayerException;
-import com.andrewyunt.megatw_base.objects.Ability;
-import com.andrewyunt.megatw_base.objects.Skill;
-import com.andrewyunt.megatw_base.objects.Upgradable;
 import com.andrewyunt.megatw_base.utilities.Utils;
 import com.andrewyunt.megatw_master.MegaTWMaster;
 import com.andrewyunt.megatw_master.objects.GamePlayer;
 
-/**
- * The class used to create instances of the shop menu.
- * 
- * @author Andrew Yunt
- */
 public class ShopMenu implements Listener {
-
+	
 	private Inventory inv;
 	private final ItemStack glassPane = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 7);
 
@@ -58,166 +32,188 @@ public class ShopMenu implements Listener {
 		glassPaneMeta.setLore(new ArrayList<String>());
 		glassPane.setItemMeta(glassPaneMeta);
 	}
+	
+	public void openMainMenu(GamePlayer player) {
 
-	public void openClassUpgradeMenu(GamePlayer player, Class classType) {
-		
-		inv = Bukkit.createInventory(null, 45, "Class Upgrades - " + classType.getName());
+		inv = Bukkit.createInventory(null, 27, "General");
 
-		Ability ability = classType.getAbility();
-		Skill skillOne = classType.getSkillOne();
-		Skill skillTwo = classType.getSkillTwo();
-		Skill gatheringTalent = classType.getGatheringTalent();
+		ItemStack normalClasses = new ItemStack(Material.IRON_SWORD);
+		ItemStack heroClasses = new ItemStack(Material.DIAMOND_SWORD);
+		ItemStack close = new ItemStack(Material.ARROW);
 		
-		int abilityLevel = player.getLevel(ability);
-		int skillOneLevel = player.getLevel(skillOne);
-		int skillTwoLevel = player.getLevel(skillTwo);
-		int kitLevel = player.getLevel(classType);
-		int gatheringTalentLevel = player.getLevel(gatheringTalent);
+		ItemMeta normalClassesMeta = normalClasses.getItemMeta();
+		ItemMeta heroClassesMeta = heroClasses.getItemMeta();
+		ItemMeta closeMeta = close.getItemMeta();
 		
-		FileConfiguration config = MegaTWMaster.getInstance().getConfig();
-
-		String[] lines = new String[] {
-				ability.toString(),
-				skillOne.toString(),
-				skillTwo.toString(),
-				classType.toString(),
-				gatheringTalent.toString()
-		};
+		normalClassesMeta.setDisplayName("Normal Classes");
+		heroClassesMeta.setDisplayName("Hero Classes");
+		closeMeta.setDisplayName("Close");
 		
-		int pass = 0;
+		normalClasses.setItemMeta(normalClassesMeta);
+		heroClasses.setItemMeta(heroClassesMeta);
+		close.setItemMeta(closeMeta);
 		
-		for (String line : lines) {
-			int level = 0;
-			int i = 0;
-			int curLevel = 1;
-			
-			switch (pass) {
-				case 0:
-					level = abilityLevel;
-					break;
-				case 1:
-					level = skillOneLevel;
-					i = 9;
-					curLevel = i - 8;
-					break;
-				case 2:
-					level = skillTwoLevel;
-					i = 18;
-					curLevel = i - 17;
-					break;
-				case 3:
-					level = kitLevel;
-					i = 27;
-					curLevel = i - 26;
-					break;
-				case 4:
-					level = gatheringTalentLevel;
-					i = 36;
-					curLevel = i - 35;
-					break;
-			}
-			
-			int stop = i + 9;
-			boolean available = false;
-			
-			while (i < stop) {
-				ItemStack is = null;
-				ConfigurationSection section = config.getConfigurationSection("classes." + classType.toString() 
-				+ "." + line + "." + String.valueOf(curLevel));
-				
-				String name = null;
-				List<String> lore = null;
-				
-				if (section.contains("title") && section.contains("description")) {
-					name = section.getString("title");
-					lore = new ArrayList<String>(Arrays.asList(section.getString("description").split("\\r?\\n")));
-				}
-				
-				lore.add("");
-
-				ChatColor color = null;
-				int cost = classType.isHero() ? 
-						MegaTWMaster.getInstance().getConfig().getInt("tier-" + String.valueOf(curLevel) + "-hero-upgrade-cost")
-						: MegaTWMaster.getInstance().getConfig().getInt("tier-" + String.valueOf(curLevel) + "-upgrade-cost");
-				
-				if (available) {
-					is = new ItemStack(Material.STAINED_CLAY, 1, (short) 14);
-					color = ChatColor.RED;
-				} else
-					if (level >= curLevel) {
-						is = new ItemStack(Material.STAINED_CLAY, 1, (short) 5);
-						color = ChatColor.GREEN;
-						lore.add("Purchased");
-					} else {
-						lore.add("Cost: " + String.valueOf(cost));
-						
-						if (player.getCoins() < cost) {
-							is = new ItemStack(Material.STAINED_CLAY, 1, (short) 14);
-							color = ChatColor.RED;
-						} else {
-							is = new ItemStack(Material.STAINED_CLAY, 1, (short) 4);
-							color = ChatColor.YELLOW;
-							available = true;
-						}
-					}
-				
-				lore = Utils.colorizeList(lore, color);
-				ItemMeta meta = is.getItemMeta();
-				
-				meta.setDisplayName(color + name);
-				meta.setLore(lore);
-				is.setItemMeta(meta);
-				
-				inv.setItem(i, is);
-				
-				curLevel++;
-				i++;
-			}
-			
-			pass++;
-		}
-		
-		ItemStack goBack = new ItemStack(Material.ARROW);
-		ItemMeta goBackMeta = goBack.getItemMeta();
-		
-		goBackMeta.setDisplayName("Go Back");
-		goBack.setItemMeta(goBackMeta);
-		
-		for (int i = 36; i < 40; i++)
+		for (int i = 0; i < 12; i++)
 			inv.setItem(i, glassPane);
-		
-		inv.setItem(40, goBack);
-		
-		for (int i = 41; i < 45; i++)
+
+		inv.setItem(12, normalClasses);
+		inv.setItem(13, glassPane);
+		inv.setItem(14, Utils.addGlow(heroClasses));
+
+		for (int i = 15; i < 22; i++)
 			inv.setItem(i, glassPane);
-		
+
+		inv.setItem(22, close);
+
+		for (int i = 23; i < 27; i++)
+			inv.setItem(i, glassPane);
+
 		player.getBukkitPlayer().openInventory(inv);
 	}
 
+	private void openNormalClasses(GamePlayer player) {
+
+		inv = Bukkit.createInventory(null, 27, "General - Normal Classes");
+		
+		ItemStack zombie = new ItemStack(Material.ROTTEN_FLESH);
+		ItemStack skeleton = new ItemStack(Material.BONE);
+		ItemStack creeper = new ItemStack(Material.TNT);
+		ItemStack herobrine = new ItemStack(Material.ENDER_PEARL);
+		ItemStack goBack = new ItemStack(Material.ARROW);
+		
+		ItemMeta zombieMeta = zombie.getItemMeta();
+		ItemMeta skeletonMeta = skeleton.getItemMeta();
+		ItemMeta creeperMeta = creeper.getItemMeta();
+		ItemMeta herobrineMeta = herobrine.getItemMeta();
+		ItemMeta goBackMeta = goBack.getItemMeta();
+		
+		zombieMeta.setDisplayName("Zombie");
+		skeletonMeta.setDisplayName("Skeleton");
+		creeperMeta.setDisplayName("Creeper");
+		herobrineMeta.setDisplayName("Herobrine");
+		goBackMeta.setDisplayName("Go Back");
+		
+		zombie.setItemMeta(zombieMeta);
+		skeleton.setItemMeta(skeletonMeta);
+		creeper.setItemMeta(creeperMeta);
+		herobrine.setItemMeta(herobrineMeta);
+		goBack.setItemMeta(goBackMeta);
+		
+		for (int i = 0; i < 11; i++)
+			inv.setItem(i, glassPane);
+
+		inv.setItem(11, zombie);
+		inv.setItem(12, skeleton);
+		inv.setItem(13, glassPane);
+		inv.setItem(14, creeper);
+		inv.setItem(15, herobrine);
+
+		for (int i = 16; i < 22; i++)
+			inv.setItem(i, glassPane);
+
+		inv.setItem(22, goBack);
+
+		for (int i = 23; i < 27; i++)
+			inv.setItem(i, glassPane);
+
+		player.getBukkitPlayer().openInventory(inv);
+	}
+
+	private void openHeroClasses(GamePlayer player) {
+
+		inv = Bukkit.createInventory(null, 27, "General - Hero Classes");
+
+		ItemStack goBack = new ItemStack(Material.ARROW);
+		ItemStack witherMinion = new ItemStack(Material.SKULL_ITEM, 1, (short) 1);
+		ItemStack spiritWarrior = new ItemStack(Material.ENCHANTMENT_TABLE);
+
+		ItemMeta goBackMeta = goBack.getItemMeta();
+		ItemMeta spiritWarriorMeta = spiritWarrior.getItemMeta();
+		ItemMeta witherMinionMeta = witherMinion.getItemMeta();
+
+		goBackMeta.setDisplayName("Go Back");
+		spiritWarriorMeta.setDisplayName("Spirit Warrior");
+		witherMinionMeta.setDisplayName("Wither Minion");
+
+		goBack.setItemMeta(goBackMeta);
+		spiritWarrior.setItemMeta(spiritWarriorMeta);
+		witherMinion.setItemMeta(witherMinionMeta);
+
+		for (int i = 0; i < 12; i++)
+			inv.setItem(i, glassPane);
+
+		inv.setItem(12, witherMinion);
+		inv.setItem(13, glassPane);
+		inv.setItem(14, spiritWarrior);
+
+		for (int i = 15; i < 22; i++)
+			inv.setItem(i, glassPane);
+
+		inv.setItem(22, goBack);
+
+		for (int i = 23; i < 27; i++)
+			inv.setItem(i, glassPane);
+
+		player.getBukkitPlayer().openInventory(inv);
+	}
+	
+	public void openClassMenu(GamePlayer player, Class classType) {
+		
+		inv = Bukkit.createInventory(null, 27, "General - Class - " + classType.getName());
+
+		ItemStack upgrades = new ItemStack(Material.EMERALD);
+		ItemStack layoutEditor = new ItemStack(Material.CHEST);
+		ItemStack goBack = new ItemStack(Material.ARROW);
+		
+		ItemMeta upgradesMeta = upgrades.getItemMeta();
+		ItemMeta layoutEditorMeta = layoutEditor.getItemMeta();
+		ItemMeta goBackMeta = goBack.getItemMeta();
+		
+		upgradesMeta.setDisplayName("Upgrades");
+		layoutEditorMeta.setDisplayName("Layout Editor");
+		goBackMeta.setDisplayName("Go Back");
+		
+		upgrades.setItemMeta(upgradesMeta);
+		layoutEditor.setItemMeta(layoutEditorMeta);
+		goBack.setItemMeta(goBackMeta);
+		
+		for (int i = 0; i < 12; i++)
+			inv.setItem(i, glassPane);
+
+		inv.setItem(12, upgrades);
+		inv.setItem(13, glassPane);
+		inv.setItem(14, layoutEditor);
+
+		for (int i = 15; i < 22; i++)
+			inv.setItem(i, glassPane);
+
+		inv.setItem(22, goBack);
+
+		for (int i = 23; i < 27; i++)
+			inv.setItem(i, glassPane);
+
+		player.getBukkitPlayer().openInventory(inv);
+	}
+	
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {
-
-		if (event.getClickedInventory() == null)
+		
+		Inventory inv = event.getClickedInventory();
+		
+		if (inv == null)
 			return;
 		
-		String title = event.getClickedInventory().getTitle();
+		String title = inv.getTitle();
 		
 		if (title == null)
 			return;
 		
-		if (!title.startsWith("Class Upgrades"))
-			return;
-		
-		ItemStack is = event.getCurrentItem();
-		
-		if(is == null || is.getType() == Material.AIR)
-			return;
-		
-		if (!is.hasItemMeta())
+		if (!(title.equals("General - Hero Classes") || title.equals("General - Normal Classes")
+				|| title.equals("General") || title.startsWith("General - Class - ")))
 			return;
 		
 		event.setCancelled(true);
-		
+
 		Player player = (Player) event.getWhoClicked();
 		GamePlayer gp = null;
 
@@ -226,54 +222,67 @@ public class ShopMenu implements Listener {
 		} catch (PlayerException e) {
 		}
 		
-		Class classType = Class.valueOf(title.split("\\-", -1)[1].toUpperCase().substring(1).replace(' ', '_'));
+		ItemStack is = event.getCurrentItem();
 		
-		if (is.getType() == Material.ARROW) {
-			MegaTWMaster.getInstance().getGeneralMenu().openClassMenu(gp, classType);
+		if(is == null || is.getType() == Material.AIR)
 			return;
+		
+		if (!is.hasItemMeta())
+			return;
+
+		String name = is.getItemMeta().getDisplayName();
+
+		if (title.equals("General - Normal Classes") || title.equals("General - Hero Classes")) {
+			
+			if (name == null || Objects.equals(name, " "))
+				return;
+
+			if (name.equals("Go Back")) {
+				openMainMenu(gp);
+				return;
+			}
+			
+			String classStr = name.replace(" ", "_").toUpperCase();
+
+			if (!player.hasPermission("megatw.class." + classStr.toLowerCase()))  {
+				player.sendMessage(ChatColor.RED + "You do not own that class.");
+				return;
+			}
+			
+			openClassMenu(gp, Class.valueOf(classStr));
+			
+		} else if (title.equals("General")) {
+
+			switch (name) {
+				case "Normal Classes":
+					openNormalClasses(gp);
+					break;
+				case "Hero Classes":
+					openHeroClasses(gp);
+					break;
+				case "Close":
+					player.closeInventory();
+					break;
+			}
+		} else if (title.startsWith("General - Class - ")) {
+			
+			String classStr = title.replace("General - Class - ", "").replace(" ", "_").toUpperCase();
+			Class classType = Class.valueOf(classStr);
+			
+			switch (name) {
+			case "Upgrades":
+				MegaTWMaster.getInstance().getUpgradesMenu().openClassUpgradeMenu(gp, classType);
+				break;
+			case "Layout Editor":
+				MegaTWMaster.getInstance().getLayoutEditorMenu().openClassMenu(gp, classType, true);
+				break;
+			case "Go Back":
+				if (classType.isHero())
+					openHeroClasses(gp);
+				else
+					openNormalClasses(gp);
+				break;
+			}
 		}
-		
-		if (is.getType() != Material.STAINED_CLAY)
-			return;
-		
-		if (is.getDurability() == 14) {
-			player.sendMessage(ChatColor.RED + "You must unlock the preceding upgrades or you cannot afford that upgrade.");
-			return;
-		} else if (is.getDurability() == 5) {
-			player.sendMessage(ChatColor.RED + "You have already puchased that class upgrade.");
-			return;
-		}
-		
-		Upgradable upgradable = null;
-		int slot = event.getSlot();
-		
-		if (slot < 9) {
-			slot++;
-			upgradable = classType.getAbility();
-		} else if (9 <= slot && slot < 18) {
-			slot = slot - 8;
-			upgradable = classType.getSkillOne();
-		} else if (18 <= slot && slot < 27) {
-			slot = slot - 17;		
-			upgradable = classType.getSkillTwo();
-		} else if (27 <= slot && slot < 36) {
-			slot = slot - 26;
-			upgradable = classType;
-		} else if (36 <= slot && slot < 45) {
-			slot = slot - 35;
-			upgradable = classType.getGatheringTalent();
-		}
-		
-		int cost = classType.isHero() ? 
-				MegaTWMaster.getInstance().getConfig().getInt("tier-" + String.valueOf(slot) + "-hero-upgrade-cost")
-				: MegaTWMaster.getInstance().getConfig().getInt("tier-" + String.valueOf(slot) + "-upgrade-cost");
-		
-		gp.removeCoins(cost);
-		gp.setClassLevel(upgradable, slot);
-		
-		gp.getBukkitPlayer().sendMessage(ChatColor.AQUA + String.format("%s upgrade purchased successfully.",
-					upgradable.getName() + ChatColor.GREEN));
-		
-		openClassUpgradeMenu(gp, classType);
 	}
 }

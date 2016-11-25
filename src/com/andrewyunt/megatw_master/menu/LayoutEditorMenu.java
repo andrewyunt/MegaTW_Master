@@ -189,7 +189,7 @@ public class LayoutEditorMenu implements Listener {
 			
 			if (name.equals("Go Back")) {
 				if (title.startsWith("Layout Editor -")) {
-					MegaTWMaster.getInstance().getGeneralMenu().openClassMenu(gp,
+					MegaTWMaster.getInstance().getShopMenu().openClassMenu(gp,
 							Class.valueOf(title.replace("Layout Editor - ", "").replace(" ", "_").toUpperCase()));
 					event.setCancelled(true);
 				}

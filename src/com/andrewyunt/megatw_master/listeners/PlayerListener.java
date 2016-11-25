@@ -27,6 +27,10 @@ import com.andrewyunt.megatw_master.objects.SignDisplay;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 
+import SebucoHD.Selector.Main;
+
+import java.lang.reflect.Method;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -42,6 +46,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -112,27 +117,32 @@ public class PlayerListener implements Listener {
 
 		Material type = item.getType();
 
-		if (!(type == Material.BOOK || type == Material.COMMAND || type == Material.DIAMOND_SWORD))
+		if (type != Material.COMPASS && type != Material.EMERALD && type == Material.COMMAND)
 			return;
 
 		ItemMeta meta = item.getItemMeta();
 		String name = meta.getDisplayName();
 		Player player = event.getPlayer();
 		GamePlayer gp = null;
-		MegaTWMaster plugin = MegaTWMaster.getInstance();
 
 		try {
-			gp = plugin.getPlayerManager().getPlayer(player.getName());
+			gp = MegaTWMaster.getInstance().getPlayerManager().getPlayer(player.getName());
 		} catch (PlayerException e) {
 		}
 
-		if (name.equals(ChatColor.AQUA + "General"))
-			plugin.getGeneralMenu().openMainMenu(gp);
-		else if (name.equals(ChatColor.GREEN + "Class Selector"))
+		if (name.equals(ChatColor.RED + "Server Selector")) {
+			Method method = null;
 			
-			MegaTWBase.getInstance().getClassSelectorMenu().openMainMenu(gp);
-			
-		else if (name.equals(ChatColor.GREEN + "Class Selector"))
+			try {
+				method = Main.getInstance().getClass().getDeclaredMethod("getInv", Player.class);
+				method.setAccessible(true);
+				player.openInventory((Inventory) method.invoke(Main.getInstance(), player));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else if (name.equals(ChatColor.GREEN + "Shop"))
+			MegaTWMaster.getInstance().getShopMenu().openMainMenu(gp);
+		else if (name.equals(ChatColor.YELLOW + "Class Selector"))
 			MegaTWBase.getInstance().getClassSelectorMenu().openMainMenu(gp);
 	}
 
