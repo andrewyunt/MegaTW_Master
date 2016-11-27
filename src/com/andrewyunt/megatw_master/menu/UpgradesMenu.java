@@ -178,17 +178,24 @@ public class UpgradesMenu implements Listener {
 		}
 		
 		ItemStack goBack = new ItemStack(Material.ARROW);
+		ItemStack layoutEditor = new ItemStack(Material.CHEST);
+		
 		ItemMeta goBackMeta = goBack.getItemMeta();
+		ItemMeta layoutEditorMeta = layoutEditor.getItemMeta();
 		
 		goBackMeta.setDisplayName("Go Back");
+		layoutEditorMeta.setDisplayName("Layout Editor");
+		
 		goBack.setItemMeta(goBackMeta);
+		layoutEditor.setItemMeta(layoutEditorMeta);
 		
 		for (int i = 36; i < 40; i++)
 			inv.setItem(i, glassPane);
 		
 		inv.setItem(40, goBack);
+		inv.setItem(41,layoutEditor);
 		
-		for (int i = 41; i < 45; i++)
+		for (int i = 42; i < 45; i++)
 			inv.setItem(i, glassPane);
 		
 		player.getBukkitPlayer().openInventory(inv);
@@ -197,24 +204,36 @@ public class UpgradesMenu implements Listener {
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {
 
+		Bukkit.getServer().broadcastMessage("1");
+		
 		if (event.getClickedInventory() == null)
 			return;
+		
+		Bukkit.getServer().broadcastMessage("2");
 		
 		String title = event.getClickedInventory().getTitle();
 		
 		if (title == null)
 			return;
 		
+		Bukkit.getServer().broadcastMessage("3");
+		
 		if (!title.startsWith("Class Upgrades"))
 			return;
+		
+		Bukkit.getServer().broadcastMessage("4");
 		
 		ItemStack is = event.getCurrentItem();
 		
 		if(is == null || is.getType() == Material.AIR)
 			return;
 		
+		Bukkit.getServer().broadcastMessage("5");
+		
 		if (!is.hasItemMeta())
 			return;
+		
+		Bukkit.getServer().broadcastMessage("6");
 		
 		event.setCancelled(true);
 		
@@ -228,8 +247,14 @@ public class UpgradesMenu implements Listener {
 		
 		Class classType = Class.valueOf(title.split("\\-", -1)[1].toUpperCase().substring(1).replace(' ', '_'));
 		
-		if (is.getType() == Material.ARROW) {
-			MegaTWMaster.getInstance().getShopMenu().openClassMenu(gp, classType);
+		if (is.getType() == Material.CHEST)
+			MegaTWMaster.getInstance().getLayoutEditorMenu().open(gp, classType, true);
+		else if (is.getType() == Material.ARROW) {
+			if (classType.isHero())
+				MegaTWMaster.getInstance().getShopMenu().openHeroClasses(gp);
+			else
+				MegaTWMaster.getInstance().getShopMenu().openNormalClasses(gp);
+			
 			return;
 		}
 		

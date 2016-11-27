@@ -35,7 +35,7 @@ public class ShopMenu implements Listener {
 	
 	public void openMainMenu(GamePlayer player) {
 
-		inv = Bukkit.createInventory(null, 27, "General");
+		inv = Bukkit.createInventory(null, 27, "Shop");
 
 		ItemStack normalClasses = new ItemStack(Material.IRON_SWORD);
 		ItemStack heroClasses = new ItemStack(Material.DIAMOND_SWORD);
@@ -71,9 +71,9 @@ public class ShopMenu implements Listener {
 		player.getBukkitPlayer().openInventory(inv);
 	}
 
-	private void openNormalClasses(GamePlayer player) {
+	public void openNormalClasses(GamePlayer player) {
 
-		inv = Bukkit.createInventory(null, 27, "General - Normal Classes");
+		inv = Bukkit.createInventory(null, 27, "Shop - Normal Classes");
 		
 		ItemStack zombie = new ItemStack(Material.ROTTEN_FLESH);
 		ItemStack skeleton = new ItemStack(Material.BONE);
@@ -119,18 +119,18 @@ public class ShopMenu implements Listener {
 		player.getBukkitPlayer().openInventory(inv);
 	}
 
-	private void openHeroClasses(GamePlayer player) {
-
-		inv = Bukkit.createInventory(null, 27, "General - Hero Classes");
-
+	public void openHeroClasses(GamePlayer player) {
+		
+		inv = Bukkit.createInventory(null, 27, "Shop - Hero Classes");
+		
 		ItemStack goBack = new ItemStack(Material.ARROW);
 		ItemStack witherMinion = new ItemStack(Material.SKULL_ITEM, 1, (short) 1);
 		ItemStack spiritWarrior = new ItemStack(Material.ENCHANTMENT_TABLE);
-
+		
 		ItemMeta goBackMeta = goBack.getItemMeta();
 		ItemMeta spiritWarriorMeta = spiritWarrior.getItemMeta();
 		ItemMeta witherMinionMeta = witherMinion.getItemMeta();
-
+		
 		goBackMeta.setDisplayName("Go Back");
 		spiritWarriorMeta.setDisplayName("Spirit Warrior");
 		witherMinionMeta.setDisplayName("Wither Minion");
@@ -157,44 +157,6 @@ public class ShopMenu implements Listener {
 		player.getBukkitPlayer().openInventory(inv);
 	}
 	
-	public void openClassMenu(GamePlayer player, Class classType) {
-		
-		inv = Bukkit.createInventory(null, 27, "General - Class - " + classType.getName());
-
-		ItemStack upgrades = new ItemStack(Material.EMERALD);
-		ItemStack layoutEditor = new ItemStack(Material.CHEST);
-		ItemStack goBack = new ItemStack(Material.ARROW);
-		
-		ItemMeta upgradesMeta = upgrades.getItemMeta();
-		ItemMeta layoutEditorMeta = layoutEditor.getItemMeta();
-		ItemMeta goBackMeta = goBack.getItemMeta();
-		
-		upgradesMeta.setDisplayName("Upgrades");
-		layoutEditorMeta.setDisplayName("Layout Editor");
-		goBackMeta.setDisplayName("Go Back");
-		
-		upgrades.setItemMeta(upgradesMeta);
-		layoutEditor.setItemMeta(layoutEditorMeta);
-		goBack.setItemMeta(goBackMeta);
-		
-		for (int i = 0; i < 12; i++)
-			inv.setItem(i, glassPane);
-
-		inv.setItem(12, upgrades);
-		inv.setItem(13, glassPane);
-		inv.setItem(14, layoutEditor);
-
-		for (int i = 15; i < 22; i++)
-			inv.setItem(i, glassPane);
-
-		inv.setItem(22, goBack);
-
-		for (int i = 23; i < 27; i++)
-			inv.setItem(i, glassPane);
-
-		player.getBukkitPlayer().openInventory(inv);
-	}
-	
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {
 		
@@ -208,8 +170,7 @@ public class ShopMenu implements Listener {
 		if (title == null)
 			return;
 		
-		if (!(title.equals("General - Hero Classes") || title.equals("General - Normal Classes")
-				|| title.equals("General") || title.startsWith("General - Class - ")))
+		if (!title.equals("Shop - Hero Classes") && !title.equals("Shop - Normal Classes") && !title.equals("Shop"))
 			return;
 		
 		event.setCancelled(true);
@@ -232,7 +193,7 @@ public class ShopMenu implements Listener {
 
 		String name = is.getItemMeta().getDisplayName();
 
-		if (title.equals("General - Normal Classes") || title.equals("General - Hero Classes")) {
+		if (title.equals("Shop - Normal Classes") || title.equals("Shop - Hero Classes")) {
 			
 			if (name == null || Objects.equals(name, " "))
 				return;
@@ -249,9 +210,9 @@ public class ShopMenu implements Listener {
 				return;
 			}
 			
-			openClassMenu(gp, Class.valueOf(classStr));
+			MegaTWMaster.getInstance().getUpgradesMenu().openClassUpgradeMenu(gp, Class.valueOf(classStr));
 			
-		} else if (title.equals("General")) {
+		} else if (title.equals("Shop")) {
 
 			switch (name) {
 				case "Normal Classes":
@@ -263,25 +224,6 @@ public class ShopMenu implements Listener {
 				case "Close":
 					player.closeInventory();
 					break;
-			}
-		} else if (title.startsWith("General - Class - ")) {
-			
-			String classStr = title.replace("General - Class - ", "").replace(" ", "_").toUpperCase();
-			Class classType = Class.valueOf(classStr);
-			
-			switch (name) {
-			case "Upgrades":
-				MegaTWMaster.getInstance().getUpgradesMenu().openClassUpgradeMenu(gp, classType);
-				break;
-			case "Layout Editor":
-				MegaTWMaster.getInstance().getLayoutEditorMenu().openClassMenu(gp, classType, true);
-				break;
-			case "Go Back":
-				if (classType.isHero())
-					openHeroClasses(gp);
-				else
-					openNormalClasses(gp);
-				break;
 			}
 		}
 	}

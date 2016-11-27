@@ -56,7 +56,7 @@ public class LayoutEditorMenu implements Listener {
 		glassPane.setItemMeta(glassPaneMeta);
 	}
 	
-	public void openClassMenu(GamePlayer player, Class classType, boolean loadFromDB) {
+	public void open(GamePlayer player, Class classType, boolean loadFromDB) {
 		
 		BukkitScheduler scheduler = MegaTWBase.getInstance().getServer().getScheduler();
 		scheduler.scheduleSyncDelayedTask(MegaTWBase.getInstance(), () -> player.getBukkitPlayer().getInventory().clear(), 6L);
@@ -189,8 +189,10 @@ public class LayoutEditorMenu implements Listener {
 			
 			if (name.equals("Go Back")) {
 				if (title.startsWith("Layout Editor -")) {
-					MegaTWMaster.getInstance().getShopMenu().openClassMenu(gp,
-							Class.valueOf(title.replace("Layout Editor - ", "").replace(" ", "_").toUpperCase()));
+					Class classType = Class.valueOf(title.replace("Layout Editor - ", "").replace(" ", "_").toUpperCase());
+					
+					MegaTWMaster.getInstance().getUpgradesMenu().openClassUpgradeMenu(gp, classType);
+					
 					event.setCancelled(true);
 				}
 				return;
@@ -198,7 +200,7 @@ public class LayoutEditorMenu implements Listener {
 			
 			if (name.equals("Reset Layout")) {
 				if (title.startsWith("Layout Editor -")) {
-					openClassMenu(gp, Class.valueOf(title.replace("Layout Editor - ", "")
+					open(gp, Class.valueOf(title.replace("Layout Editor - ", "")
 							.replace(" ", "_").toUpperCase()), false);
 					event.setCancelled(true);
 				}
@@ -210,7 +212,7 @@ public class LayoutEditorMenu implements Listener {
 			BukkitScheduler scheduler = MegaTWMaster.getInstance().getServer().getScheduler();
 			scheduler.scheduleSyncDelayedTask(MegaTWMaster.getInstance(), () -> {
 				try  {
-					openClassMenu(gp, Class.valueOf(name.replace(" ", "_").toUpperCase()), true);
+					open(gp, Class.valueOf(name.replace(" ", "_").toUpperCase()), true);
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
 				}

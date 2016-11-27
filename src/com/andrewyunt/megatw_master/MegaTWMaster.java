@@ -92,7 +92,7 @@ public class MegaTWMaster extends JavaPlugin {
 		server.getMessenger().registerIncomingPluginChannel(this, "BungeeCord", serverManager);
 		
 		pm.registerEvents(new PlayerListener(), this);
-		pm.registerEvents(shopMenu, this);
+		pm.registerEvents(upgradesMenu, this);
 		pm.registerEvents(layoutEditorMenu, this);
 		pm.registerEvents(shopMenu, this);
 		
