@@ -203,37 +203,25 @@ public class UpgradesMenu implements Listener {
 
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {
-
-		Bukkit.getServer().broadcastMessage("1");
 		
 		if (event.getClickedInventory() == null)
 			return;
-		
-		Bukkit.getServer().broadcastMessage("2");
 		
 		String title = event.getClickedInventory().getTitle();
 		
 		if (title == null)
 			return;
 		
-		Bukkit.getServer().broadcastMessage("3");
-		
 		if (!title.startsWith("Class Upgrades"))
 			return;
-		
-		Bukkit.getServer().broadcastMessage("4");
 		
 		ItemStack is = event.getCurrentItem();
 		
 		if(is == null || is.getType() == Material.AIR)
 			return;
 		
-		Bukkit.getServer().broadcastMessage("5");
-		
 		if (!is.hasItemMeta())
 			return;
-		
-		Bukkit.getServer().broadcastMessage("6");
 		
 		event.setCancelled(true);
 		
