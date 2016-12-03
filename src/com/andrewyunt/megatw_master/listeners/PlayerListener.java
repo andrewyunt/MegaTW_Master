@@ -21,8 +21,11 @@ import com.andrewyunt.megatw_master.MegaTWMaster;
 import com.andrewyunt.megatw_master.exception.ServerException;
 import com.andrewyunt.megatw_master.exception.SignException;
 import com.andrewyunt.megatw_master.managers.SignManager;
+import com.andrewyunt.megatw_base.objects.Class;
 import com.andrewyunt.megatw_master.objects.GamePlayer;
 import com.andrewyunt.megatw_master.objects.GameServer;
+import com.andrewyunt.megatw_master.objects.LeaderboardSign;
+import com.andrewyunt.megatw_master.objects.ServerSign;
 import com.andrewyunt.megatw_master.objects.SignDisplay;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -159,15 +162,23 @@ public class PlayerListener implements Listener {
 			return;
 		
 		Player player = event.getPlayer();
-		SignDisplay.Type type = null;
-		int place = 0;
 		GameServer server = null;
+		SignDisplay.Type type;
+		int place = 0;
+		Class classType = null;
+		boolean weekly = false, finalKill = false;
 		
 		if (event.getLine(0).equalsIgnoreCase("[Leaderboard]")) {
 			type = SignDisplay.Type.LEADERBOARD;
 			
+			classType = Class.valueOf(event.getLine(1));
+			
+			String[] spliced = event.getLine(2).split(" ");
+			weekly = Boolean.valueOf(spliced[0]);
+			finalKill = Boolean.valueOf(spliced[1]);
+			
 			try {
-				place = Integer.valueOf(event.getLine(1));
+				place = Integer.valueOf(event.getLine(3));
 			} catch (NumberFormatException e) {
 				player.sendMessage(ChatColor.RED + "You did not enter an integer for the sign place.");
 				return;
@@ -206,12 +217,13 @@ public class PlayerListener implements Listener {
 			return;
 		}
 		
-		if (place != 0)
-			sign.setPlace(place);
-		else if (server != null)
-			sign.setServer(server);
-		else
-			return;
+		if (type == SignDisplay.Type.LEADERBOARD) {
+			((LeaderboardSign) sign).setPlace(place);
+			((LeaderboardSign) sign).setClassType(classType);
+			((LeaderboardSign) sign).setWeekly(weekly);
+			((LeaderboardSign) sign).setFinalKill(finalKill);
+		} else if (type == SignDisplay.Type.SERVER)
+			((ServerSign) sign).setServer(server);
 		
 		sign.refresh();
 	}

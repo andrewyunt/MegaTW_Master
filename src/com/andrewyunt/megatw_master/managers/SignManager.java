@@ -23,8 +23,9 @@ import com.andrewyunt.megatw_master.MegaTWMaster;
 import com.andrewyunt.megatw_master.configuration.SignConfiguration;
 import com.andrewyunt.megatw_master.exception.SignException;
 import com.andrewyunt.megatw_master.objects.GameServer;
+import com.andrewyunt.megatw_master.objects.LeaderboardSign;
+import com.andrewyunt.megatw_master.objects.ServerSign;
 import com.andrewyunt.megatw_master.objects.SignDisplay;
-
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -32,18 +33,25 @@ import java.util.Set;
 public class SignManager {
 	
 	public final Set<SignDisplay> signs = new HashSet<SignDisplay>();
-
+	
 	public SignDisplay createSign(SignDisplay.Type type, Location loc, long updateInterval)
 			throws SignException {
 		
 		if (loc == null || updateInterval < 1)
 			throw new SignException();
 		
-		SignDisplay sign = new SignDisplay(
-				type,
-				Utils.getHighestEntry(MegaTWMaster.getInstance().getSignConfig().getConfig()
-						.getConfigurationSection("signs")) + 1,
-				loc, updateInterval, false);
+		SignDisplay sign;
+		
+		if (type == SignDisplay.Type.LEADERBOARD)
+			sign = new LeaderboardSign(
+					Utils.getHighestEntry(MegaTWMaster.getInstance().getSignConfig().getConfig()
+							.getConfigurationSection("signs")) + 1,
+					loc, updateInterval, false);
+		else
+			sign = new ServerSign(
+					Utils.getHighestEntry(MegaTWMaster.getInstance().getSignConfig().getConfig()
+							.getConfigurationSection("signs")) + 1,
+					loc, updateInterval, false);
 		
 		signs.add(sign);
 		
@@ -110,8 +118,9 @@ public class SignManager {
 		Set<SignDisplay> signs = new HashSet<SignDisplay>();
 		
 		for (SignDisplay sign : this.signs)
-			if (sign.getServer() == server)
-				signs.add(sign);
+			if (sign instanceof ServerSign)
+				if (((ServerSign) sign).getServer() == server)
+					signs.add(sign);
 		
 		return signs;
 	}
@@ -148,7 +157,12 @@ public class SignManager {
 	 */
 	public SignDisplay loadSign(ConfigurationSection section) {
 
-		SignDisplay sign = SignDisplay.loadFromConfig(section);
+		SignDisplay sign;
+		
+		if (SignDisplay.Type.valueOf(section.getString("type")) == SignDisplay.Type.LEADERBOARD)
+			sign = LeaderboardSign.loadFromConfig(section);
+		else
+			sign = ServerSign.loadFromConfig(section);
 
 		Location loc = Utils.deserializeLocation(section.getConfigurationSection("location"));
 		
