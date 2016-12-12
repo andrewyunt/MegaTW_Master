@@ -22,6 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import com.andrewyunt.megatw_base.MegaTWBase;
 import com.andrewyunt.megatw_base.objects.DynamicScoreboard;
 import com.andrewyunt.megatw_master.MegaTWMaster;
 
@@ -37,20 +38,20 @@ public class GamePlayer extends com.andrewyunt.megatw_base.objects.GamePlayer {
 		super(name);
 		
 		// Set up the scoreboard
-		String title = ChatColor.AQUA + "" + ChatColor.BOLD + "MEGATW";
+		String title = ChatColor.YELLOW + "" + ChatColor.BOLD + "MEGATW";
 		
 		dynamicScoreboard = new DynamicScoreboard(title);
 		getBukkitPlayer().setScoreboard(dynamicScoreboard.getScoreboard());
 		
 		BukkitScheduler scheduler = MegaTWMaster.getInstance().getServer().getScheduler();
 		scheduler.scheduleSyncRepeatingTask(MegaTWMaster.getInstance(), new Runnable() {
-			ChatColor curTitleColor = ChatColor.AQUA;
+			ChatColor curTitleColor = ChatColor.YELLOW;
 			
 			@Override
 			public void run() {
-				ChatColor newTitleColor = curTitleColor == ChatColor.AQUA ? ChatColor.WHITE : ChatColor.AQUA;
+				ChatColor newTitleColor = curTitleColor == ChatColor.YELLOW ? ChatColor.WHITE : ChatColor.YELLOW;
 				
-				dynamicScoreboard.getObjective().setDisplayName(newTitleColor + "" + ChatColor.BOLD + "MEGATW");
+				dynamicScoreboard.getObjective().setDisplayName(newTitleColor.toString() + ChatColor.BOLD + "MEGATW");
 				
 				curTitleColor = newTitleColor;
 			}
@@ -68,9 +69,9 @@ public class GamePlayer extends com.andrewyunt.megatw_base.objects.GamePlayer {
 		inv.clear();
 		
 		for (Map.Entry<Integer, ItemStack> entry : MegaTWMaster.getInstance().getHotbarItems().entrySet()) {
-		    int pos = entry.getKey();
-		    ItemStack is = entry.getValue();
-		    inv.setItem(pos, is);
+			int pos = entry.getKey();
+			ItemStack is = entry.getValue();
+			inv.setItem(pos, is);
 		}
 	}
 	
@@ -93,20 +94,32 @@ public class GamePlayer extends com.andrewyunt.megatw_base.objects.GamePlayer {
 	@Override
 	public void updateDynamicScoreboard() {
 		
-		// Space
-		dynamicScoreboard.blankLine(7);
+		dynamicScoreboard.blankLine(10);
 		
-		// Display player's coins */
-		dynamicScoreboard.update(6, ChatColor.GOLD + "" + ChatColor.BOLD + "Coins");
-		dynamicScoreboard.update(5, String.valueOf(coins));
+		// Display player's coins
+		dynamicScoreboard.update(9, ChatColor.WHITE + "Coins: " + ChatColor.GREEN + coins);
 		
-		// Display player's kills */
-		dynamicScoreboard.update(4, ChatColor.RED + "" + ChatColor.BOLD + "Kills");
-		dynamicScoreboard.update(3, String.valueOf(kills));
+		// Display player's wins
+		dynamicScoreboard.update(8, ChatColor.WHITE + "Wins: " + ChatColor.GREEN + wins);
 		
-		dynamicScoreboard.update(2, ChatColor.RESET + "   ");
+		// Display kill stats
+		int weeklyKills = MegaTWBase.getInstance().getDataSource().getKills(this, true, false, null);
+		int weeklyFinalKills = MegaTWBase.getInstance().getDataSource().getKills(this, true, true, null);
 		
-		// Display server's IP */
+		dynamicScoreboard.update(7, ChatColor.WHITE + "Weekly Kills: "
+				+ ChatColor.GREEN + weeklyKills);
+		dynamicScoreboard.update(6, ChatColor.WHITE + "Weekly Final Kills: "
+				+ ChatColor.GREEN + weeklyFinalKills);
+		
+		dynamicScoreboard.blankLine(5);
+		
+		// Display player's chosen class
+		dynamicScoreboard.update(4, ChatColor.WHITE + "Chosen Class:");
+		dynamicScoreboard.update(3, ChatColor.GREEN + (classType == null ? "None" : classType.getName()));
+		
+		dynamicScoreboard.blankLine(2);
+		
+		// Display server's IP
 		dynamicScoreboard.update(1, ChatColor.YELLOW + "mc.amosita.net");
 	}
 }
