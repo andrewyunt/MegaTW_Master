@@ -61,7 +61,7 @@ public class UpgradesMenu implements Listener {
 
 	public void openClassUpgradeMenu(GamePlayer player, Class classType) {
 		
-		inv = Bukkit.createInventory(null, 45, "Class Upgrades - " + classType.getName());
+		inv = Bukkit.createInventory(null, 54, "Class Upgrades - " + classType.getName());
 
 		Ability ability = classType.getAbility();
 		Skill skillOne = classType.getSkillOne();
@@ -189,13 +189,13 @@ public class UpgradesMenu implements Listener {
 		goBack.setItemMeta(goBackMeta);
 		layoutEditor.setItemMeta(layoutEditorMeta);
 		
-		for (int i = 36; i < 40; i++)
+		for (int i = 45; i < 49; i++)
 			inv.setItem(i, glassPane);
 		
-		inv.setItem(40, goBack);
-		inv.setItem(41,layoutEditor);
+		inv.setItem(49, goBack);
+		inv.setItem(50,layoutEditor);
 		
-		for (int i = 42; i < 45; i++)
+		for (int i = 51; i < 54; i++)
 			inv.setItem(i, glassPane);
 		
 		player.getBukkitPlayer().openInventory(inv);
