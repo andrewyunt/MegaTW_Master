@@ -16,6 +16,7 @@
 package com.andrewyunt.megatw_master.objects;
 
 import java.util.Map;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -73,22 +74,6 @@ public class GamePlayer extends com.andrewyunt.megatw_base.objects.GamePlayer {
 			ItemStack is = entry.getValue();
 			inv.setItem(pos, is);
 		}
-	}
-	
-	@Override
-	public void setCoins(int coins) {
-		
-		this.coins = coins;
-		
-		updateDynamicScoreboard();
-	}
-	
-	@Override
-	public void setKills(int kills) {
-		
-		this.kills = kills;
-		
-		updateDynamicScoreboard();
 	}
 	
 	@Override
